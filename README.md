@@ -12,6 +12,7 @@ Goal of this provject:
 - Use typescript, react, react-dom, redux to build a game
 - Use css3 for basic animation effect (no Canvas / SVG)
 - Use html5 Audio for sound effect
+- Implement simple game solver using alpha–beta pruning
 - Support websocket base bi-directional communication (streatch)
 
 ## Journal
