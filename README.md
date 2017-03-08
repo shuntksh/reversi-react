@@ -1,5 +1,8 @@
 # reversi-react
 
+[![build status](https://travis-ci.org/shuntksh/reversi-react.svg?branch=master)](https://travis-ci.org/shuntksh/reversi-react)
+
+
 An attempt to implement the Reversi game using [React.js](https://facebook.github.io/react/). In this project, instead of using canvas / svg for visualization, it only uses standard DOM elements such that `HTMLDivElement` and `HTMLSpanElement`. 
 
 Goal of this provject:
