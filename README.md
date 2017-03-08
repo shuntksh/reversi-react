@@ -6,7 +6,7 @@
 
 An attempt to implement the Reversi game using [React.js](https://facebook.github.io/react/). In this project, instead of using canvas / svg for visualization, it only uses standard DOM elements such that `HTMLDivElement` and `HTMLSpanElement`. 
 
-Goal of this provject:
+Goal of this project:
 
 - Support both PC clients and mobile clients
 - Use typescript, react, react-dom, redux to build a game
