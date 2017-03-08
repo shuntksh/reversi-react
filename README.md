@@ -2,8 +2,12 @@
 
 An attempt to implement the Reversi game using [React.js](https://facebook.github.io/react/). In this project, instead of using canvas / svg for visualization, it only uses standard DOM elements such that `HTMLDivElement` and `HTMLSpanElement`. 
 
-Technology stack: 
+Goal of this provject:
 
-- typescript, react, react-dom, redux
-- CSS3 for basic animation effect (no Canvas / SVG)
-- HTML5 Audio for sound effect
+- Support both PC clients and mobile clients
+- Use typescript, react, react-dom, redux to build a game
+- Use css3 for basic animation effect (no Canvas / SVG)
+- Use html5 Audio for sound effect
+- Support websocket base bi-directional communication (streatch)
+
+## Journal
