@@ -1,0 +1,33 @@
+{
+    "version": "2.0.0",
+    "compilerOptions": {
+        "declaration": false,
+        "experimentalDecorators": true,
+        "jsx": "react",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "outDir": "dist/",
+        "removeComments": false,
+        "sourceMap": false,
+        "strictNullChecks": true,
+        "stripInternal": true,
+        "target": "es5",
+        "lib": ["es2016", "dom"]
+    },
+    "include": [
+        "./index.d.ts",
+        "src/**/*.tsx",
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "config",
+        "node_modules",
+        "dist",
+        "src/**/*.spec.t*"
+    ]
+}

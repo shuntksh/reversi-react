@@ -74,7 +74,7 @@ const config = {
             allChunks: true,           
         }),
         new HtmlWebpackPlugin({
-            template: "./src/client/index.html",
+            template: "./src/index.html",
             inject: "body",
         }),
         new webpack.DefinePlugin({

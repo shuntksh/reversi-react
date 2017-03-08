@@ -6,7 +6,7 @@
   "repository": "git@github.com:shuntksh/reversi-react.git",
   "author": "Shun <shuntksh@gmail.com>",
   "license": "MIT",
-  "script": {
+  "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js --display-error-details",
     "check": "npm run npm-check && npm run nsp",
     "clean": "rimraf ./dist",
