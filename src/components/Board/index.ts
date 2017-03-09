@@ -1,4 +1,6 @@
 
+export { Square, SquareProps } from "./Square";
+
 export enum Player {
     black = 1,
     white = 2,
@@ -7,7 +9,7 @@ export enum Player {
 export enum SquareState {
     blank,
     black,
-    white
+    white,
 };
 
 export interface SoundEffect {
@@ -19,7 +21,7 @@ export interface SoundEffect {
 /**
  * Squares are cordinated in x-y axis addressed from 0 to 7 and caller
  * shall initialize two dimentional vector with 0.
- * 
+ *
  *      0 1 2 3 4 5 6 7 (x)
  *    0
  *    1
@@ -27,7 +29,7 @@ export interface SoundEffect {
  *    6
  *    7
  *   (y)
- * 
+ *
  * @param animate - Perform flip animation when true (default=true)
  * @param player - A number that specify player of the turn (1 = black, 2 = white)
  * @param sound - An object to specify audio URL for each player
@@ -36,7 +38,7 @@ export interface SoundEffect {
  */
 export interface BoardProps {
     animate: boolean;
-    player: Player
+    player: Player;
     sound: SoundEffect;
     value: SquareState[][];
     onClickSquare(x: number, y: number): void;
