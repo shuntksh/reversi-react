@@ -2,8 +2,7 @@ sudo: false
 language: node_js
 node_js: stable
 branches:
-  only:
-    - /^greenkeeper/.*$/
+  - /^greenkeeper/.*$/
 script:
   - ls -la src
   - yarn build
