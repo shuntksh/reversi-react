@@ -16,6 +16,7 @@ const reporter = require("postcss-reporter");
 const stylefmt = require("stylefmt");
 const stylelint = require("stylelint");
 
+// PostCSS Plugin Configuration
 const plugins = () => ([
     stylefmt(),
     stylelint(),
@@ -31,6 +32,7 @@ const plugins = () => ([
     reporter({ clearMessage: true, throwError: true }),
 ]);
 
+// Webpack Configuraion
 const config = {
     target: "web",
     stats: true,
@@ -79,25 +81,11 @@ const config = {
         }),
         new webpack.DefinePlugin({
             "process.env": {
-                "NODE_ENV": JSON.stringify(process.env.NODE_ENV).toLowerCase(),
+                "NODE_ENV": JSON.stringify(process.env.NODE_ENV || "").toLowerCase(),
             },
         }),
         new webpack.LoaderOptionsPlugin({
             options: {
-                postcss: () => [
-                    stylefmt(),
-                    stylelint(),
-                    cssnext({
-                            browsers: [
-                            ">1%",
-                            "last 4 versions",
-                            "Firefox ESR",
-                            "not ie < 9",
-                        ],
-                    }),
-                    cssnano({ autoprefixer: false }),
-                    reporter({ clearMessage: true, throwError: true }),
-                ],
                 tslint: {
                     failOnHint: true,
                 }
@@ -157,7 +145,7 @@ if (process.env.NODE_ENV === "production") {
         test: /\.css$/,
         use: [
             { loader: "style-loader" },
-            { loader: "css-loader", options: { 
+            { loader: "css-loader", options: {
                 importLoaders: 1,
                 camelCase: true,
                 localIdentName: '[path][name]__[local]--[hash:base64:5]',
