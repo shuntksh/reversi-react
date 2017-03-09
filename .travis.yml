@@ -6,4 +6,5 @@ branches:
     - master 
     - /^greenkeeper/.*$/
 script:
+  - ls -la src
   - yarn build
