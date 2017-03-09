@@ -10,7 +10,7 @@
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js --display-error-details",
     "check": "npm run npm-check && npm run nsp",
     "clean": "rimraf ./dist",
-    "prebuild:css": "tcm --pattern ./src/client/**/*.css --camelCase",
+    "prebuild:css": "tcm --pattern ./src/**/*.css --camelCase",
     "npm-check": "npm-check --skip-unused",
     "nsp": "nsp check",
     "start": "cross-env NODE_ENV=development concurrently --kill-others --raw \"npm run prebuild:css -- --watch\" \"npm run start:dev-server\"",
