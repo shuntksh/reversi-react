@@ -1,6 +1,6 @@
 # reversi-react
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/shuntksh/binarreversi-react.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/shuntksh/reversi-react.svg)](https://greenkeeper.io/)
 [![build status](https://travis-ci.org/shuntksh/reversi-react.svg?branch=master)](https://travis-ci.org/shuntksh/reversi-react)
 
 
