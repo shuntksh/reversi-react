@@ -8,6 +8,7 @@ An attempt to implement the Reversi game using [React.js](https://facebook.githu
 
 Goal of this project:
 
+- Keep it simple and concise
 - Support both PC clients and mobile clients
 - Use typescript, react, react-dom, redux to build a game
 - Use css3 for basic animation effect (no Canvas / SVG)
