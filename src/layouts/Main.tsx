@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Square } from "../components/Board";
+import { Square } from "../components";
 
 export class Main extends React.PureComponent<{}, {}> {
     public render() {
