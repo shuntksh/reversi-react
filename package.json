@@ -9,15 +9,16 @@
   "author": "Shun <shuntksh@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --display-error-details",
+    "build": "npm run clean && npm run build:app",
+    "build:app": "cross-env NODE_ENV=production webpack -p",
     "check": "npm run npm-check && npm run nsp",
-    "clean": "rimraf ./dist",
+    "clean": "rimraf ./build",
     "prebuild:css": "tcm --pattern ./src/**/*.css --camelCase",
     "npm-check": "npm-check --skip-unused",
     "nsp": "nsp check",
     "start": "cross-env NODE_ENV=development concurrently --kill-others --raw \"npm run prebuild:css -- --watch\" \"npm run start:dev-server\"",
     "start:dev-server": "webpack-dev-server --hot --inline"
-},
+  },
   "devDependencies": {
     "@types/chai": "3.4.35",
     "@types/classnames": "0.0.32",
@@ -28,6 +29,7 @@
     "@types/react-redux": "4.4.37",
     "awesome-typescript-loader": "3.1.2",
     "chai": "3.5.0",
+    "classnames": "^2.2.5",
     "concurrently": "3.4.0",
     "cross-env": "3.2.3",
     "css-loader": "0.26.2",

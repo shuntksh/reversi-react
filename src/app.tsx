@@ -1,9 +1,6 @@
 import * as React from "react";
 import * as ReactDom from "react-dom";
 
-import { Square } from "./components/Board";
+import Main from "./layouts/Main";
 
-ReactDom.render(
-    <Square />,
-    document.getElementById("main"),
-);
+ReactDom.render(<Main/>, document.getElementById("main"));
