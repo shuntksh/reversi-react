@@ -36,14 +36,14 @@ const plugins = () => ([
 const config = {
     target: "web",
     stats: true,
-    entry: ["./src/app.tsx"],
+    entry: ["./src/index.tsx"],
 
     resolve: {
         extensions: [".tsx", ".ts", ".js", ".jsx"],
     },
 
     output: {
-        path: path.resolve(process.cwd(), "./dist/"),
+        path: path.resolve(process.cwd(), "./build/"),
         publicPath: "/",
         filename: "[name].[chunkhash].js",
         sourceMapFilename: "[name].[chunkhash].map",
@@ -165,11 +165,6 @@ if (process.env.NODE_ENV === "production") {
         historyApiFallback: true,
         host: "0.0.0.0",
         port: 8080,
-        proxy: {
-            "/api/*": {
-                target: "http://localhost:3000",
-            },
-        },
     };
 }
 
