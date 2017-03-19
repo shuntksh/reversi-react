@@ -3,17 +3,27 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/shuntksh/reversi-react.svg)](https://greenkeeper.io/)
 [![build status](https://travis-ci.org/shuntksh/reversi-react.svg?branch=master)](https://travis-ci.org/shuntksh/reversi-react)
 
+An attempt to create an example React application something other than Todo app. In this project, we are going to implement [the Reversi game](https://en.wikipedia.org/wiki/Reversi) using [React.js](https://facebook.github.io/react/), [MobX](https://mobx.js.org/) and [TypeScript](http://www.typescriptlang.org/). To demonstrate virtual DOM rendering in action, the app only uses nomrmal DOM elements such that `HTMLDivElement` and `HTMLSpanElement` to with CSS3 animations.
 
-An attempt to implement the Reversi game using [React.js](https://facebook.github.io/react/). In this project, instead of using canvas / svg for visualization, it only uses standard DOM elements such that `HTMLDivElement` and `HTMLSpanElement`. 
-
-Goal of this project:
-
-- Keep it simple and concise
 - Support both PC clients and mobile clients
-- Use typescript, react, react-dom, redux to build a game
-- Use css3 for basic animation effect (no Canvas / SVG)
-- Use html5 Audio for sound effect
-- Implement simple game solver using alpha–beta pruning
-- Support websocket base bi-directional communication (streatch)
+- Use typescript, react, react-dom, mobx to build a game
+- Use css3 for basic animation effect (no Canvas / WebGL / SVG)
+- Use html5 Audio for sound effects
 
-## Journal
+## Design
+
+TBA
+
+## How to build
+
+```bash
+# Using yarn
+yarn
+yarn start
+
+# Or using npm
+npm install
+npm run start
+```
+
+## History
