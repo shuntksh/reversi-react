@@ -36,7 +36,7 @@ const plugins = () => ([
 const config = {
     target: "web",
     stats: true,
-    entry: ["./src/app.tsx"],
+    entry: ["./src/index.tsx"],
 
     resolve: {
         extensions: [".tsx", ".ts", ".js", ".jsx"],
