@@ -12,9 +12,17 @@ An attempt to create an example React application something other than Todo app.
 
 ## Design
 
+<p align="center">
+  <img alt="Diagram" width="75%" src="https://github.com/shuntksh/reversi-react/blob/master/doc/component-diagram.png">
+</p>
+
+### `<Board />`
+
 TBA
 
-#### Square
+### `<Square />`
+
+Square is the component represents each square of the board. Its responsibility is to render a piece based on value passed as props. It automatically injects respective CSS animations for visual effects and plays HTML5 audio for sound effects.
 
 <p align="left">
   <img alt="Square" width="150px" src="https://github.com/shuntksh/reversi-react/blob/master/doc/square-demo.gif">
