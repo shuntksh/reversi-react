@@ -16,7 +16,9 @@ TBA
 
 ### Square
 
-![square](https://github.com/shuntksh/reversi-react/blob/master/doc/square-demo.gif)
+<p align="right">
+  <img alt="Square" width="300px" src="https://github.com/shuntksh/reversi-react/blob/master/doc/square-demo.gif">
+</p>
 
 ```tsx
 <div style={{ margin: "100px" }}>
