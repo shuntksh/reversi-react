@@ -10,7 +10,7 @@
   "license": "MIT",
   "scripts": {
     "build": "npm run clean && npm run build:app",
-    "build:app": "cross-env NODE_ENV=production webpack -p",
+    "build:app": "cross-env NODE_ENV=production webpack",
     "check": "npm run npm-check && npm run nsp",
     "clean": "rimraf ./build",
     "prebuild:css": "tcm --pattern ./src/**/*.css --camelCase",
@@ -54,7 +54,6 @@
     "redux": "3.6.0",
     "rimraf": "2.6.1",
     "style-loader": "0.14.1",
-    "stylefmt": "5.3.0",
     "stylelint": "7.9.0",
     "stylelint-config-standard": "16.0.0",
     "ts-node": "2.1.0",
@@ -66,9 +65,5 @@
     "url-loader": "0.5.8",
     "webpack": "2.2.1",
     "webpack-dev-server": "2.4.2"
-  },
-  "dependencies": {
-    "@types/rc-slider": "^6.1.0",
-    "rc-slider": "^6.2.0"
   }
 }
