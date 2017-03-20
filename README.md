@@ -18,7 +18,7 @@ An attempt to create an example React application something other than Todo app.
 
 ### `<Board />`
 
-TBA
+Board is the component represents Reversi game and provides user interaction by invoking a right callback for mouse and touch events. However, it has zero knowledge on how the Reversi game should be played. It only renders the game based on two dimentional array that describes board passed by game logic (or shared state provided by MobX in this case).
 
 ### `<Square />`
 
