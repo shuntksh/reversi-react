@@ -1,16 +1,12 @@
 
-export { Square, SquareProps } from "./Square";
+import { Dot, PieceState, Square, SquareProps } from "./Square";
+
+export { Dot, PieceState, Square, SquareProps };
 
 export enum Player {
     black = 1,
     white = 2,
 }
-
-export enum SquareState {
-    blank,
-    black,
-    white,
-};
 
 export interface SoundEffect {
     sound: boolean;
@@ -40,6 +36,6 @@ export interface BoardProps {
     animate: boolean;
     player: Player;
     sound: SoundEffect;
-    value: SquareState[][];
+    value: PieceState[][];
     onClickSquare(x: number, y: number): void;
 }
