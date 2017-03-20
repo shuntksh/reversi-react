@@ -16,8 +16,8 @@ TBA
 
 ### Square
 
-<p align="right">
-  <img alt="Square" width="300px" src="https://github.com/shuntksh/reversi-react/blob/master/doc/square-demo.gif">
+<p align="left">
+  <img alt="Square" width="240px" src="https://github.com/shuntksh/reversi-react/blob/master/doc/square-demo.gif">
 </p>
 
 ```tsx
