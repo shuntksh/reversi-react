@@ -15,6 +15,40 @@
   user-select: none;
 }
 
+:local(.dot) {
+  background: black;
+  height: 7px;
+  width: 7px;
+}
+
+:local(.top-left) {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  border-bottom-right-radius: 100%;
+}
+
+:local(.top-right) {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  border-bottom-right-radius: 100%;
+}
+
+:local(.bottom-left) {
+  position: absolute;
+  bottom: -2px;
+  left: -2px;
+  border-top-right-radius: 100%;
+}
+
+:local(.bottom-right) {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  border-top-right-radius: 100%;
+}
+
 :local(.piece) {
   margin: 6px;
   position: absolute;
@@ -23,7 +57,7 @@
 }
 
 :local(.float-in) {
-  animation-duration: 0.2s;
+  animation-duration: 0.1s;
   animation-name: float-in-effect;
 }
 
@@ -93,7 +127,7 @@
 
 @keyframes float-in-effect {
   0% {
-    transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -8px, 0);
   }
 
   60% {

@@ -15,17 +15,6 @@ export interface SoundEffect {
 }
 
 /**
- * Squares are cordinated in x-y axis addressed from 0 to 7 and caller
- * shall initialize two dimentional vector with 0.
- *
- *      0 1 2 3 4 5 6 7 (x)
- *    0
- *    1
- *    :
- *    6
- *    7
- *   (y)
- *
  * @param animate - Perform flip animation when true (default=true)
  * @param player - A number that specify player of the turn (1 = black, 2 = white)
  * @param sound - An object to specify audio URL for each player

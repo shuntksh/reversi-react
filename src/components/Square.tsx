@@ -14,7 +14,7 @@ export enum Dot {
     topLeft,
     topRight,
     bottomLeft,
-    bottomLight,
+    bottomRight,
 };
 
 export interface SquareProps {
@@ -43,6 +43,18 @@ export class Square extends React.PureComponent<SquareProps, SquareStates> {
     }
 
     public render() {
+        let dotStyle;
+        if (this.props.dot > Dot.none) {
+            switch (this.props.dot) {
+            case Dot.topLeft: dotStyle = css.topLeft; break;
+            case Dot.topRight: dotStyle = css.topRight; break;
+            case Dot.bottomLeft: dotStyle = css.bottomLeft; break;
+            case Dot.bottomRight: dotStyle = css.bottomRight; break;
+            default: {; }
+            }
+        }
+        console.log(this.props.dot);
+
         const cxPiece = [css.piece];
         if (this.props.value) {
             cxPiece.push(this.props.value === PieceState.BLACK ? css.black : css.white);
@@ -60,6 +72,7 @@ export class Square extends React.PureComponent<SquareProps, SquareStates> {
         return (
             <div onClick={this.handleClick}>
                 <div className={css.square}>
+                    {this.props.dot && <div className={cx(css.dot, dotStyle)} />}
                     <div className={cx(cxPiece)} />
                 </div>
             </div>
