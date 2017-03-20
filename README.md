@@ -16,10 +16,6 @@ TBA
 
 ### Square
 
-<p align="left">
-  <img alt="Square" width="240px" src="https://github.com/shuntksh/reversi-react/blob/master/doc/square-demo.gif">
-</p>
-
 ```tsx
 <div style={{ margin: "100px" }}>
     <div style={{ display: "block", paddingLeft: "40px" }}>
@@ -32,6 +28,10 @@ TBA
     </div>
 </div>
 ```
+
+<p align="left">
+  <img alt="Square" width="200px" src="https://github.com/shuntksh/reversi-react/blob/master/doc/square-demo.gif">
+</p>
 
 ## How to build
 
