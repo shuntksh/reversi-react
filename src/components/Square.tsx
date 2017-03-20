@@ -1,11 +1,8 @@
 import * as cx from "classnames";
-import * as Slider from "rc-slider";
 import * as React from "react";
 
 import { SquareState } from "./index";
 import * as css from "./Square.css";
-
-import "rc-slider/assets/index.css";
 
 export interface SquareProps {
     x?: number;  // Position
@@ -14,27 +11,49 @@ export interface SquareProps {
     onClick?: (ev: React.SyntheticEvent<MouseEvent>, x: number, y: number) => any;
 }
 
-export class Square extends React.PureComponent<SquareProps, {}> {
-    public state = { deg: 0 };
+export interface SquareStates {
+    /**
+     * @param toFlip - true: flipping animation, false (defualt): falling animation
+     */
+    toFlip: boolean;
+}
 
-    public updateSlider = (deg: number): void => { this.setState({ deg }); };
+export class Square extends React.PureComponent<SquareProps, SquareStates> {
+    public state = { toFlip: false };
+
+    public componentWillReceiveProps(nextProps: SquareProps) {
+        // true if white=>black | black=>white but blank=>black|white
+        const { value } = this.props;
+        const toFlip = !!(value && nextProps.value && value !== nextProps.value);
+        this.setState({ toFlip });
+    }
 
     public render() {
-        const { value } = this.props;
-        const cxSquare = [css.square];
         const cxPiece = [css.piece];
+        if (this.props.value) {
+            cxPiece.push(this.props.value === SquareState.black ? css.black : css.white);
+            if (this.state.toFlip) {
+                if (this.props.value === SquareState.black) {
+                    cxPiece.push(css.swivelToBlack);
+                } else {
+                    cxPiece.push(css.swivelToWhite);
+                }
+            } else {
+                cxPiece.push(css.floatIn);
+            }
+        }
+
         return (
-        <div>
-            {value} / {this.state.deg}
-            <div className={cx(cxSquare)}>
-                <div className={cx(cxPiece)} >
-                    <div className={css.head} />
-                    <div className={css.tail} />
+            <div onClick={this.handleClick}>
+                <div className={css.square}>
+                    <div className={cx(cxPiece)} />
                 </div>
             </div>
-            <Slider value={this.state.deg} onChange={this.updateSlider} />
-        </div>
         );
+    }
+
+    private handleClick = (): void => {
+        console.log(this.props.value);
     }
 }
 

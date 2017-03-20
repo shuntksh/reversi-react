@@ -13,12 +13,10 @@ const webpack = require("webpack");
 const cssnext = require("postcss-cssnext");
 const cssnano = require("cssnano");
 const reporter = require("postcss-reporter");
-const stylefmt = require("stylefmt");
 const stylelint = require("stylelint");
 
 // PostCSS Plugin Configuration
 const plugins = () => ([
-    stylefmt(),
     stylelint(),
     cssnext({
             browsers: [
@@ -63,7 +61,7 @@ const config = {
             },
             {
                 test: /\.(eot|woff|woff2|ttf|svg|png)$/,
-                use: ['url-loader?limit=30000'],
+                use: ['url-loader?limit=100000'],
             }
         ],
     },
@@ -118,7 +116,7 @@ if (process.env.NODE_ENV === "production") {
     });
 
     config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-        compress: { screw_ie8: true },
+        compress: { screw_ie8: true, warnings: false },
         mangle: { screw_ie8: true },
         output: { comments: false, screw_ie8: true },
     }));
