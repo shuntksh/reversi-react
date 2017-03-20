@@ -18,11 +18,10 @@ export enum Dot {
 };
 
 export interface SquareProps {
-    x?: number;  // Position
-    y?: number;  // POsition
-    dot: Dot; // Enum 0, ... , 4
+    x: number;  // Position
+    y: number;  // Position
     value: PieceState; // Enum 0, 1, 2
-    onClick?: (ev: React.SyntheticEvent<MouseEvent>, x: number, y: number) => any;
+    onClick?: (x: number, y: number) => any;
 }
 
 export interface SquareStates {
@@ -30,10 +29,11 @@ export interface SquareStates {
      * @param toFlip - true: flipping animation, false (defualt): falling animation
      */
     toFlip: boolean;
+    dot: Dot;
 }
 
 export class Square extends React.PureComponent<SquareProps, SquareStates> {
-    public state = { toFlip: false };
+    public state = { toFlip: false, dot: Dot.none };
 
     public componentWillReceiveProps(nextProps: SquareProps) {
         // true if white=>black | black=>white but blank=>black|white
@@ -43,18 +43,6 @@ export class Square extends React.PureComponent<SquareProps, SquareStates> {
     }
 
     public render() {
-        let dotStyle;
-        if (this.props.dot > Dot.none) {
-            switch (this.props.dot) {
-            case Dot.topLeft: dotStyle = css.topLeft; break;
-            case Dot.topRight: dotStyle = css.topRight; break;
-            case Dot.bottomLeft: dotStyle = css.bottomLeft; break;
-            case Dot.bottomRight: dotStyle = css.bottomRight; break;
-            default: {; }
-            }
-        }
-        console.log(this.props.dot);
-
         const cxPiece = [css.piece];
         if (this.props.value) {
             cxPiece.push(this.props.value === PieceState.BLACK ? css.black : css.white);
@@ -64,23 +52,36 @@ export class Square extends React.PureComponent<SquareProps, SquareStates> {
                 } else {
                     cxPiece.push(css.swivelToWhite);
                 }
-            } else {
-                cxPiece.push(css.floatIn);
+            // } else {
+            //     cxPiece.push(css.floatIn);
             }
         }
-
+        const dotStyle = this.getDot();
         return (
-            <div onClick={this.handleClick}>
-                <div className={css.square}>
-                    {this.props.dot && <div className={cx(css.dot, dotStyle)} />}
-                    <div className={cx(cxPiece)} />
-                </div>
+            <div className={css.square} onClick={this.handleClick}>
+                {dotStyle && <div className={cx(css.dot, dotStyle)} />}
+                <div className={cx(cxPiece)} />
             </div>
         );
     }
 
+    private getDot = (): string => {
+        const { x, y } = this.props;
+        if (y === 1 || y === 5) {
+            if (x === 1 || x === 5) { return css.bottomRight; }
+            if (x === 2 || x === 6) { return css.bottomLeft; }
+        }
+        if (y === 2 || y === 6) {
+            if (x === 1 || x === 5) { return css.topRight; }
+            if (x === 2 || x === 6) { return css.topLeft; }
+        }
+        return "";
+    }
+
     private handleClick = (): void => {
-        console.log(this.props.value);
+        if (typeof this.props.onClick === "function") {
+            this.props.onClick(this.props.x, this.props.y);
+        }
     }
 }
 

@@ -1,0 +1,10 @@
+:local(.board) {
+  border: solid 5px #000;
+  width: 608px;
+  height: 608px;
+}
+
+:local(.row) {
+  display: block;
+  height: 76px;
+}

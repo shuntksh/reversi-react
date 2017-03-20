@@ -1,39 +1,42 @@
 import * as React from "react";
 
-import { Square } from "./components";
+import { Board, PieceState } from "./components";
 
-/**
- * Board are cordinated in x-y axis addressed from 0 to 7 and caller
- * shall initialize two dimentional vector with 0.
- *
- *      0 1 2 3 4 5 6 7 (x)
- *    0
- *    1
- *    :
- *    6
- *    7
- *   (y)
- *
- */
+const values: PieceState[][] = [];
+for (let y = 0; y < 8; y++) {
+    const Y: PieceState[] = [];
+    for (let x = 0; x < 8; x++) {
+        if (x === 3 && y === 3 || x === 4 && y === 4) {
+            Y.push(1);
+        } else if (x === 3 && y === 4 || x === 4 && y === 3) {
+            Y.push(2);
+        } else {
+            Y.push(0);
+        }
+    }
+    values.push(Y);
+}
+
 export class Reversi extends React.PureComponent<{}, {}> {
-    public state = { value: 0 };
+    public state = { values };
 
-    public toBlack = () => this.setState({ value: 1 });
-    public toWhite = () => this.setState({ value: 2 });
-    public reset = () => this.setState({ value: 0 });
+    public handleClick = (x: number, y: number) => {
+        console.log(x, y);
+        const _values = [...values];
+        _values[y][x] = values[y][x] ? 3 - values[y][x] : 1;
+        this.setState({ values: _values });
+    }
+
+    public shouldComponentUpdate() {
+        return true;
+    }
 
     public render() {
+        console.log(values);
         return (
-        <div style={{ margin: "100px" }}>
-            <div style={{ display: "block", paddingLeft: "40px" }}>
-                <Square value={this.state.value} dot={1} />
+            <div style={{ display: "block", marginLeft: "40px" }}>
+                <Board values={values} onClickSquare={this.handleClick} />
             </div>
-            <div style={{ margin: "10px", display: "inline-block" }}>
-                <button onClick={this.reset}>Reset</button>
-                <button onClick={this.toBlack}>Black</button>
-                <button onClick={this.toWhite}>White</button>
-            </div>
-        </div>
         );
     }
 }

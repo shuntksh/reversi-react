@@ -14,7 +14,11 @@ An attempt to create an example React application something other than Todo app.
 
 TBA
 
-### Square
+#### Square
+
+<p align="left">
+  <img alt="Square" width="150px" src="https://github.com/shuntksh/reversi-react/blob/master/doc/square-demo.gif">
+</p>
 
 ```tsx
 <div style={{ margin: "100px" }}>
@@ -29,9 +33,9 @@ TBA
 </div>
 ```
 
-<p align="left">
-  <img alt="Square" width="200px" src="https://github.com/shuntksh/reversi-react/blob/master/doc/square-demo.gif">
-</p>
+#### Board
+
+TBA
 
 ## How to build
 

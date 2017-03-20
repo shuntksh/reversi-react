@@ -13,41 +13,44 @@
   border: 2px solid #000;
   cursor: default;
   user-select: none;
+  display: inline-block;
+  margin: 0;
 }
+
+/* Dot on square */
 
 :local(.dot) {
   background: black;
-  height: 7px;
-  width: 7px;
+  height: 5px;
+  width: 5px;
+  position: absolute;
 }
 
 :local(.top-left) {
-  position: absolute;
   top: -2px;
   left: -2px;
   border-bottom-right-radius: 100%;
 }
 
 :local(.top-right) {
-  position: absolute;
   top: -2px;
   right: -2px;
-  border-bottom-right-radius: 100%;
+  border-bottom-left-radius: 100%;
 }
 
 :local(.bottom-left) {
-  position: absolute;
   bottom: -2px;
   left: -2px;
   border-top-right-radius: 100%;
 }
 
 :local(.bottom-right) {
-  position: absolute;
   bottom: -2px;
   right: -2px;
-  border-top-right-radius: 100%;
+  border-top-left-radius: 100%;
 }
+
+/* Piece */
 
 :local(.piece) {
   margin: 6px;

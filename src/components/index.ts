@@ -1,6 +1,8 @@
 
+import { Board, BoardProps } from "./Board";
 import { Dot, PieceState, Square, SquareProps } from "./Square";
 
+export { Board, BoardProps };
 export { Dot, PieceState, Square, SquareProps };
 
 export enum Player {
@@ -12,19 +14,4 @@ export interface SoundEffect {
     sound: boolean;
     srcBlack: string;
     srcWhite: string;
-}
-
-/**
- * @param animate - Perform flip animation when true (default=true)
- * @param player - A number that specify player of the turn (1 = black, 2 = white)
- * @param sound - An object to specify audio URL for each player
- * @param value - A two dimentional vector value representing a game
- * @param onClickSquare - A callback function when user clicks a board
- */
-export interface BoardProps {
-    animate: boolean;
-    player: Player;
-    sound: SoundEffect;
-    value: PieceState[][];
-    onClickSquare(x: number, y: number): void;
 }
