@@ -14,6 +14,23 @@ An attempt to create an example React application something other than Todo app.
 
 TBA
 
+### Square
+
+![square](https://github.com/shuntksh/reversi-react/blob/master/doc/square-demo.gif)
+
+```tsx
+<div style={{ margin: "100px" }}>
+    <div style={{ display: "block", paddingLeft: "40px" }}>
+        <Square value={this.state.value} dot={0}/>
+    </div>
+    <div style={{ margin: "10px", display: "inline-block" }}>
+        <button onClick={this.reset}>Reset</button>
+        <button onClick={this.toBlack}>Black</button>
+        <button onClick={this.toWhite}>White</button>
+    </div>
+</div>
+```
+
 ## How to build
 
 ```bash

@@ -20,11 +20,6 @@
   position: absolute;
   min-width: 64px;
   transform-style: preserve-3d;
-  perspective: 1200;
-}
-
-:local(.piece:hover) {
-  transform: rotateY(270deg);
 }
 
 :local(.float-in) {

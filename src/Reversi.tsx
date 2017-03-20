@@ -13,7 +13,7 @@ export class Reversi extends React.PureComponent<{}, {}> {
         return (
         <div style={{ margin: "100px" }}>
             <div style={{ display: "block", paddingLeft: "40px" }}>
-                <Square  value={this.state.value}/>
+                <Square value={this.state.value} dot={0}/>
             </div>
             <div style={{ margin: "10px", display: "inline-block" }}>
                 <button onClick={this.reset}>Reset</button>
