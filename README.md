@@ -13,7 +13,7 @@ An attempt to create an example React application something other than Todo app.
 ## Design
 
 <p align="center">
-  <img alt="Diagram" width="75%" src="https://github.com/shuntksh/reversi-react/blob/master/doc/component-diagram.png">
+  <img alt="Diagram" width="50%" src="https://github.com/shuntksh/reversi-react/blob/master/doc/component-diagram.png">
 </p>
 
 ### `<Board />`
