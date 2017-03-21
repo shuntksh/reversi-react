@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDom from "react-dom";
 
-import Reversi from "./Reversi";
+import Main from "./Main";
 
-ReactDom.render(<Reversi/>, document.getElementById("main"));
+ReactDom.render(<Main/>, document.getElementById("main"));

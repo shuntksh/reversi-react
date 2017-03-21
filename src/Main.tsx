@@ -17,7 +17,7 @@ for (let y = 0; y < 8; y++) {
     values.push(Y);
 }
 
-export class Reversi extends React.PureComponent<{}, {}> {
+export class Main extends React.PureComponent<{}, {}> {
     public state = { values };
 
     public handleClick = (x: number, y: number) => {
@@ -41,4 +41,4 @@ export class Reversi extends React.PureComponent<{}, {}> {
     }
 }
 
-export default Reversi;
+export default Main;
