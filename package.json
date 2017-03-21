@@ -23,7 +23,7 @@
     "@types/chai": "3.4.35",
     "@types/classnames": "0.0.32",
     "@types/mocha": "2.2.40",
-    "@types/react": "15.0.17",
+    "@types/react": "15.0.18",
     "@types/react-addons-test-utils": "0.14.17",
     "@types/react-dom": "0.14.23",
     "@types/react-redux": "4.4.37",
