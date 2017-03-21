@@ -29,15 +29,13 @@ Square is a component represents each square of the board. Its responsibility is
 </p>
 
 ```tsx
-<div style={{ margin: "100px" }}>
-    <div style={{ display: "block", paddingLeft: "40px" }}>
-        <Square value={this.state.value} dot={0}/>
-    </div>
-    <div style={{ margin: "10px", display: "inline-block" }}>
-        <button onClick={this.reset}>Reset</button>
-        <button onClick={this.toBlack}>Black</button>
-        <button onClick={this.toWhite}>White</button>
-    </div>
+<div style={{ display: "block", paddingLeft: "40px" }}>
+    <Square value={this.state.value} dot={0}/>
+</div>
+<div style={{ margin: "10px", display: "inline-block" }}>
+    <button onClick={this.reset}>Reset</button>
+    <button onClick={this.toBlack}>Black</button>
+    <button onClick={this.toWhite}>White</button>
 </div>
 ```
 
