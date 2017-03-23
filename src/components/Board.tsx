@@ -1,7 +1,8 @@
 import * as React from "react";
 
+import { Square as SquareEnum } from "../game/Reversi";
 import * as css from "./Board.css";
-import { PieceState, Player, SoundEffect, Square } from "./index";
+import { Player, SoundEffect, Square } from "./index";
 
 /**
  * Board are cordinated in x-y axis addressed from 0 to 7 and caller
@@ -26,7 +27,7 @@ export interface BoardProps {
     animate?: boolean;
     player?: Player;
     sound?: SoundEffect;
-    values: PieceState[][];
+    values: SquareEnum[][];
     onClickSquare?: (x: number, y: number) => void;
 }
 

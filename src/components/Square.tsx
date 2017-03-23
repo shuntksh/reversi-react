@@ -1,13 +1,9 @@
 import * as cx from "classnames";
 import * as React from "react";
 
-import * as css from "./Square.css";
+import { Square as SquareEnum } from "../game/Reversi";
 
-export enum PieceState {
-    BLANK,
-    BLACK,
-    WHITE,
-};
+import * as css from "./Square.css";
 
 export enum Dot {
     none,
@@ -20,7 +16,7 @@ export enum Dot {
 export interface SquareProps {
     x: number;  // Position
     y: number;  // Position
-    value: PieceState; // Enum 0, 1, 2
+    value: SquareEnum; // Enum 0, 1, 2
     onClick?: (x: number, y: number) => any;
 }
 
@@ -28,32 +24,34 @@ export interface SquareStates {
     /**
      * @param toFlip - true: flipping animation, false (defualt): falling animation
      */
-    toFlip: boolean;
+    flip: boolean;
+    isNew: boolean;
     dot: Dot;
 }
 
 export class Square extends React.PureComponent<SquareProps, SquareStates> {
-    public state = { toFlip: false, dot: Dot.none };
+    public state = { flip: false, isNew: false, dot: Dot.none };
 
     public componentWillReceiveProps(nextProps: SquareProps) {
         // true if white=>black | black=>white but blank=>black|white
         const { value } = this.props;
-        const toFlip = !!(value && nextProps.value && value !== nextProps.value);
-        this.setState({ toFlip });
+        const flip = !!(value && nextProps.value && value !== nextProps.value);
+        const isNew = !!(!value && nextProps.value);
+        this.setState({ flip, isNew });
     }
 
     public render() {
         const cxPiece = [css.piece];
         if (this.props.value) {
-            cxPiece.push(this.props.value === PieceState.BLACK ? css.black : css.white);
-            if (this.state.toFlip) {
-                if (this.props.value === PieceState.BLACK) {
+            cxPiece.push(this.props.value === SquareEnum.black ? css.black : css.white);
+            if (this.state.flip) {
+                if (this.props.value === SquareEnum.black) {
                     cxPiece.push(css.swivelToBlack);
                 } else {
                     cxPiece.push(css.swivelToWhite);
                 }
-            // } else {
-            //     cxPiece.push(css.floatIn);
+            } else if  (this.state.isNew) {
+                cxPiece.push(css.floatIn);
             }
         }
         const dotStyle = this.getDot();

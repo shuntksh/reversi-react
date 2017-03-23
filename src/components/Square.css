@@ -5,7 +5,7 @@
 
 :local(.square) {
   position: relative;
-  background: #0da631;
+  background: #72ab4d;
   min-width: 72px;
   max-width: 72px;
   min-height: 72px;
@@ -71,6 +71,7 @@
 }
 
 :local(.swivel-to-white) {
+  animation-fill-mode: forwards;
   animation-duration: 0.8s;
   animation-name: swivel-effect-to-white;
 }
@@ -151,15 +152,19 @@
     transform: rotateY(-180deg) translateY(0);
   }
 
-  25% {
+  10% {
+    transform: rotateY(-180deg) translateY(0);
+  }
+
+  40% {
     transform: rotateY(180deg) translateY(-50px);
   }
 
-  50% {
+  60% {
     transform: rotateY(340deg) translateY(-50px);
   }
 
-  75% {
+  85% {
     transform: translateY(0);
   }
 
@@ -173,15 +178,19 @@
     transform: rotateY(180deg) translateY(0);
   }
 
-  25% {
+  10% {
+    transform: rotateY(180deg) translateY(0);
+  }
+
+  40% {
     transform: rotateY(-180deg) translateY(-50px);
   }
 
-  50% {
+  60% {
     transform: rotateY(-360deg) translateY(-50px);
   }
 
-  75% {
+  85% {
     transform: translateY(0);
   }
 

@@ -19,8 +19,7 @@ export interface Reversi {
 }
 
 /**
- *
- * y/x ----------------------------
+ * y/x --------------------------->
  *  | -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
  *  | -1  0  0  0  0  0  0  0  0 -1
  *  | -1  0  0  0  0  0  0  0  0 -1
@@ -51,10 +50,10 @@ export class Reversi implements Reversi {
                 board[y][x] = Square.blank;
             }
         }
-        board[3][3] = Square.black;
-        board[4][4] = Square.black;
-        board[3][4] = Square.white;
-        board[4][3] = Square.white;
+        board[4][4] = Square.white;
+        board[5][5] = Square.white;
+        board[5][4] = Square.black;
+        board[4][5] = Square.black;
         return board;
     }
 
@@ -91,16 +90,23 @@ export class Reversi implements Reversi {
      * if the target location is invalid (cannot place stone).
      */
     public move(x: number, y: number, player: Player = this.turn): boolean {
-        if (!this.canPlaceStone(x, y, player)) { return false; }
+        console.log(player === 1 ? "black" : "white");
+        // Convert cordinate back to the original data structure.
+        const _x = x + 1;
+        const _y = y + 1;
+        if (!this.canPlaceStone(_x, _y, player)) { return false; }
         for (let yd = -1; yd <= 1; yd++) {
             for (let xd = -1; xd <= 1; xd++) {
                 if (yd === 0 && xd === 0) { continue; }
-                for (let cur = 1; cur <= this.countTurnableStones(x, y, xd, yd, player); cur++) {
-                    this.board[y + cur * yd][x + cur * xd] = (player as number);
+                const count = this.countTurnableStones(_x, _y, xd, yd, player);
+                for (let cur = 1; cur <= count; cur++) {
+                    this.board[_y + cur * yd][_x + cur * xd] = (player as number);
                 }
             }
         }
-        this.board[y][x] = (player as number);
+        this.board[_y][_x] = (player as number);
+        this.turn = 3 - player;
+        this.turnCount += 1;
         return true;
     }
 

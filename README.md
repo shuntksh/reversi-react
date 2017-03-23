@@ -16,10 +16,6 @@ An attempt to create an example React application something other than Todo app.
   <img alt="Diagram" width="50%" src="https://github.com/shuntksh/reversi-react/blob/master/doc/component-diagram.png">
 </p>
 
-### `<Board />`
-
-Board is a component represents Reversi game and provides user interaction by invoking a right callback for mouse and touch events. However, it has zero knowledge on how the Reversi game should be played. It only renders the game based on two dimentional array that describes board passed by game logic (or shared state provided by MobX in this case).
-
 ### `<Square />`
 
 Square is a component represents each square of the board. Its responsibility is to render a piece based on value passed as props. It automatically injects respective CSS animations for visual effects and plays HTML5 audio for sound effects.
@@ -39,9 +35,19 @@ Square is a component represents each square of the board. Its responsibility is
 </div>
 ```
 
-#### Board
 
-TBA
+### `<Board />`
+
+Board is a component represents Reversi game and provides user interaction by invoking a right callback for mouse and touch events. However, it has zero knowledge on how the Reversi game should be played. It only renders the game based on two dimentional array that describes board passed by game logic (or shared state provided by MobX in this case).
+
+<p align="left">
+  <img alt="Square" width="480px" src="https://github.com/shuntksh/reversi-react/blob/master/doc/board-demo.gif">
+</p>
+
+```tsx
+<Board values={this.state.value} onClickSquare={this.handleClick} />
+```
+
 
 ## How to build
 
