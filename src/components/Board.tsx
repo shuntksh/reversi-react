@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Square as SquareEnum } from "../game/Reversi";
+import { Square as SquareEnum } from "../Reversi";
 import * as css from "./Board.css";
 import { Player, SoundEffect, Square } from "./index";
 

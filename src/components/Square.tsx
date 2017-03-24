@@ -1,7 +1,7 @@
 import * as cx from "classnames";
 import * as React from "react";
 
-import { Square as SquareEnum } from "../game/Reversi";
+import { Square as SquareEnum } from "../Reversi";
 
 import * as css from "./Square.css";
 
@@ -21,9 +21,6 @@ export interface SquareProps {
 }
 
 export interface SquareStates {
-    /**
-     * @param toFlip - true: flipping animation, false (defualt): falling animation
-     */
     flip: boolean;
     isNew: boolean;
     dot: Dot;

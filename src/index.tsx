@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDom from "react-dom";
 
-import Main from "./Main";
+import Container from "./Container";
 
-ReactDom.render(<Main/>, document.getElementById("main"));
+ReactDom.render(<Container/>, document.getElementById("Container"));

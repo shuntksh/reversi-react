@@ -1,4 +1,3 @@
-
 export enum Player {
     black = 1,
     white = 2,
@@ -105,8 +104,12 @@ export class Reversi implements Reversi {
             }
         }
         this.board[_y][_x] = (player as number);
-        this.turn = 3 - player;
-        this.turnCount += 1;
+
+        do {
+            this.turn = 3 - player;
+            this.turnCount += 1;
+        } while (!this.canPlaceStone() || (this.turnCount <= 60));
+
         return true;
     }
 

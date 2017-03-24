@@ -1,17 +1,17 @@
 import * as React from "react";
 
 import { Board } from "./components";
-import Reversi, { Square as SquareEnum } from "./game/Reversi";
+import Reversi, { Square as SquareEnum } from "./Reversi";
 
 const game = new Reversi();
 
-export interface MainState {
+export interface ContainerState {
     value: SquareEnum[][];
     turn: number;
     turnCount: number;
 }
 
-export class Main extends React.PureComponent<{}, MainState> {
+export class Container extends React.PureComponent<{}, ContainerState> {
     public state = { value: game.value, turn: game.turn, turnCount: game.turnCount };
 
     public handleClick = (x: number, y: number) => {
@@ -29,4 +29,4 @@ export class Main extends React.PureComponent<{}, MainState> {
     }
 }
 
-export default Main;
+export default Container;
