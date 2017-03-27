@@ -15,7 +15,7 @@ export class Container extends React.PureComponent<{}, ContainerState> {
     public state = { value: game.value, turn: game.turn, turnCount: game.turnCount };
 
     public handleClick = (x: number, y: number) => {
-        game.move(x, y);
+        game.placeStone(x, y);
         this.setState({ value: game.value, turn: game.turn, turnCount: game.turnCount });
     }
 

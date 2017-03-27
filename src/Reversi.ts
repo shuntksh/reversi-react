@@ -1,3 +1,5 @@
+const MAX_TURN_COUNT = 60;
+
 export enum Player {
     black = 1,
     white = 2,
@@ -57,7 +59,7 @@ export class Reversi implements Reversi {
     }
 
     constructor(player: Player = Player.black) {
-        this.reset(player);
+        this.init(player);
     }
 
     /**
@@ -74,22 +76,35 @@ export class Reversi implements Reversi {
         return ret;
     }
 
+    get finished(): boolean { return this.turnCount >= MAX_TURN_COUNT; }
+
+    get score(): { black: number, white: number } {
+        const black = this.value
+            .reduce((res, val) => res.concat(val), [])
+            .filter((v) => v === Square.black)
+            .length;
+        const white = this.value
+            .reduce((res, val) => res.concat(val), [])
+            .filter((v) => v === Square.white)
+            .length;
+        return { black, white };
+    }
+
     /**
      * Reset game
      */
-    public reset(player = Player.black): void {
+    public init(player = Player.black): void {
         this.board = Reversi.initBoard();
         this.player = player;
         this.turn = Player.black;
-        this.turnCount = 0;
+        this.turnCount = 1;
     }
 
     /**
      * Function that places a stone into a board and turn that pieces. Return false
      * if the target location is invalid (cannot place stone).
      */
-    public move(x: number, y: number, player: Player = this.turn): boolean {
-        console.log(player === 1 ? "black" : "white");
+    public placeStone(x: number, y: number, player: Player = this.turn): boolean {
         // Convert cordinate back to the original data structure.
         const _x = x + 1;
         const _y = y + 1;
@@ -105,11 +120,7 @@ export class Reversi implements Reversi {
         }
         this.board[_y][_x] = (player as number);
 
-        do {
-            this.turn = 3 - player;
-            this.turnCount += 1;
-        } while (!this.canPlaceStone() || (this.turnCount <= 60));
-
+        this.tickTurn();
         return true;
     }
 
@@ -156,14 +167,28 @@ export class Reversi implements Reversi {
     }
 
     private canPlaceStoneAnywhere(player: Player = this.turn): boolean {
+        console.log(player);
         for (let y = 1; y < 9; y++) {
-            for (let x = 1; y < 9; x++) {
-                if (this.board[y][x] !== Square.blank && this.canPlaceStone(x, y, player)) {
+            for (let x = 1; x < 9; x++) {
+                if (this.board[y][x] === Square.blank && this.canPlaceStone(x, y, player)) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    private tickTurn(): void {
+        if (this.turnCount >= MAX_TURN_COUNT) { return this.finishGame(); }
+        this.turn = 3 - this.turn;
+        this.turnCount += 1;
+        if (!this.canPlaceStoneAnywhere(this.turn)) {
+            return this.tickTurn();
+        }
+    }
+
+    private finishGame(): void {
+        ;
     }
 }
 

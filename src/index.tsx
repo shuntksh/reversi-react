@@ -3,4 +3,4 @@ import * as ReactDom from "react-dom";
 
 import Container from "./Container";
 
-ReactDom.render(<Container/>, document.getElementById("Container"));
+ReactDom.render(<Container/>, document.getElementById("main"));
