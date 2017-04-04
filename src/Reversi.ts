@@ -1,5 +1,12 @@
 const MAX_TURN_COUNT = 60;
 
+import computeNextMove from "./helpers/getNextMove";
+
+export interface Move {
+    x: number;
+    y: number;
+}
+
 export enum Player {
     black = 1,
     white = 2,
@@ -90,6 +97,17 @@ export class Reversi implements Reversi {
         return { black, white };
     }
 
+    /*
+     * Deep copying game state
+     */
+    public copy(game: Reversi): Reversi {
+        this.board = game.board.map((y) => [...y]);
+        this.player = game.player;
+        this.turn = game.turn;
+        this.turnCount = game.turnCount;
+        return this;
+    }
+
     /**
      * Reset game
      */
@@ -104,7 +122,7 @@ export class Reversi implements Reversi {
      * Function that places a stone into a board and turn that pieces. Return false
      * if the target location is invalid (cannot place stone).
      */
-    public placeStone(x: number, y: number, player: Player = this.turn): boolean {
+    public placeStone(x: number, y: number, player: Player = this.turn, cb?: () => any): boolean {
         // Convert cordinate back to the original data structure.
         const _x = x + 1;
         const _y = y + 1;
@@ -120,8 +138,20 @@ export class Reversi implements Reversi {
         }
         this.board[_y][_x] = (player as number);
 
-        this.tickTurn();
+        this.tickTurn(cb);
         return true;
+    }
+
+    public possibleMoves(player: Player = this.turn): Move[] {
+        const ret: Move[] = [];
+        for (let y = 1; y < 9; y++) {
+            for (let x = 1; x < 9; x++) {
+                if (this.board[y][x] === Square.blank && this.canPlaceStone(x, y, player)) {
+                    ret.push({ x, y });
+                }
+            }
+        }
+        return ret;
     }
 
     /**
@@ -166,29 +196,38 @@ export class Reversi implements Reversi {
         return false;
     }
 
+    // public evalPlacement(x: number, y: number, player: Player): number {
+    //     let score = 0;
+    //     const _x = x + 1;
+    //     const _y = y + 1;
+    //     if (!this.canPlaceStone(_x, _y, player)) { return 0; }
+    //     for (let yd = -1; yd <= 1; yd++) {
+    //         for (let xd = -1; xd <= 1; xd++) {
+    //             if (yd === 0 && xd === 0) { continue; }
+    //             score += this.countTurnableStones(_x, _y, xd, yd, player);
+    //         }
+    //     }
+    //     return score;
+    // }
+
     private canPlaceStoneAnywhere(player: Player = this.turn): boolean {
-        console.log(player);
-        for (let y = 1; y < 9; y++) {
-            for (let x = 1; x < 9; x++) {
-                if (this.board[y][x] === Square.blank && this.canPlaceStone(x, y, player)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return !!this.possibleMoves(player).length;
     }
 
-    private tickTurn(): void {
+    private tickTurn(cb?: () => any): void {
         if (this.turnCount >= MAX_TURN_COUNT) { return this.finishGame(); }
         this.turn = 3 - this.turn;
         this.turnCount += 1;
         if (!this.canPlaceStoneAnywhere(this.turn)) {
-            return this.tickTurn();
+            return this.tickTurn(cb);
+        }
+        if (this.turn !== this.player) {
+            setTimeout(() => computeNextMove(this, cb), 750);
         }
     }
 
     private finishGame(): void {
-        ;
+        console.log("DONE");
     }
 }
 
