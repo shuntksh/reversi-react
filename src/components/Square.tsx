@@ -11,7 +11,7 @@ export enum Dot {
     topRight,
     bottomLeft,
     bottomRight,
-};
+}
 
 export interface SquareProps {
     x: number;  // Position

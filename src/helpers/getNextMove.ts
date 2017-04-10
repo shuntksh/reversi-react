@@ -1,5 +1,5 @@
-
-import { Move, Player, Reversi, Square } from "../Reversi";
+/* tslint:disable */
+import { Move, Reversi, Square } from "../Reversi";
 
 interface BestMove extends Move {
     score: number;
@@ -44,7 +44,8 @@ export const minMax = (game: Reversi, depth: number = 5, maxDepth: number = 5): 
 
     // Initialize
     const score = evalScore(game);
-    if (game.turn )
+    console.log(score);
+    if (game.turn ) {}
 
     for (const move of possibleMoves) {
         const _game = new Reversi().copy(game);
