@@ -20,7 +20,7 @@
     "start:dev-server": "cross-env NODE_ENV=development webpack-dev-server --hot --inline"
   },
   "devDependencies": {
-    "@types/chai": "3.5.1",
+    "@types/chai": "3.5.2",
     "@types/classnames": "0.0.32",
     "@types/mocha": "2.2.40",
     "@types/react": "15.0.21",
