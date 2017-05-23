@@ -19,7 +19,7 @@ const stylelint = require("stylelint");
 const plugins = () => ([
     stylelint(),
     cssnext({
-            browsers: [
+        browsers: [
             ">1%",
             "last 4 versions",
             "Firefox ESR",

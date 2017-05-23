@@ -9,15 +9,13 @@
   "author": "Shun <shuntksh@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "npm run clean && npm run build:app",
-    "build:app": "cross-env NODE_ENV=production webpack",
+    "compile": "rimraf ./build && cross-env NODE_ENV=production webpack",
     "check": "npm run npm-check && npm run nsp",
-    "clean": "rimraf ./build",
-    "prebuild:css": "tcm --pattern ./src/**/*.css --camelCase",
+    "css": "tcm --pattern ./src/**/*.css --camelCase",
     "npm-check": "npm-check --skip-unused",
     "nsp": "nsp check",
-    "start": "concurrently --kill-others \"npm run prebuild:css -- --watch\" \"npm run start:dev-server\"",
-    "start:dev-server": "cross-env NODE_ENV=development webpack-dev-server --hot --inline"
+    "start": "concurrently --kill-others \"npm run css -- --watch\" \"npm run dev-server\"",
+    "dev-server": "cross-env NODE_ENV=development webpack-dev-server --hot --inline"
   },
   "devDependencies": {
     "@types/chai": "3.5.2",
