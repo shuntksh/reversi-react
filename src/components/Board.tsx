@@ -33,7 +33,7 @@ export interface BoardProps {
 
 export class Board extends React.Component<BoardProps, {}> {
     public render() {
-        const { onClickSquare, values } = this.props;
+        const { onClickSquare, player, values } = this.props;
         return (
             <div className={css.board}>
             {values.map((row, idxY) => (
@@ -44,6 +44,8 @@ export class Board extends React.Component<BoardProps, {}> {
                         x={idxX}
                         y={idxY}
                         value={value}
+                        canPlace={true}
+                        hoveringColor={player}
                         onClick={onClickSquare}
                     />
                     ))}

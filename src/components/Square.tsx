@@ -1,7 +1,7 @@
 import * as cx from "classnames";
 import * as React from "react";
 
-import { Square as SquareEnum } from "../Reversi";
+import { Player, Square as SquareEnum } from "../Reversi";
 
 import * as css from "./Square.css";
 
@@ -17,6 +17,8 @@ export interface SquareProps {
     x: number;  // Position
     y: number;  // Position
     value: SquareEnum; // Enum 0, 1, 2
+    canPlace: boolean;
+    hoveringColor?: Player;
     onClick?: (x: number, y: number) => any;
 }
 
@@ -39,6 +41,7 @@ export class Square extends React.PureComponent<SquareProps, SquareStates> {
 
     public render() {
         const cxPiece = [css.piece];
+        const styles: any = {};
         if (this.props.value) {
             cxPiece.push(this.props.value === SquareEnum.black ? css.black : css.white);
             if (this.state.flip) {
@@ -50,10 +53,14 @@ export class Square extends React.PureComponent<SquareProps, SquareStates> {
             } else if  (this.state.isNew) {
                 cxPiece.push(css.floatIn);
             }
+        } else {
+            if (this.props.canPlace) {
+                // styles.backGround = "#F00";
+            }
         }
         const dotStyle = this.getDot();
         return (
-            <div className={css.square} onClick={this.handleClick}>
+            <div className={css.square} style={styles} onClick={this.handleClick}>
                 {dotStyle && <div className={cx(css.dot, dotStyle)} />}
                 <div className={cx(cxPiece)} />
             </div>
