@@ -59,7 +59,7 @@
     "typescript": "2.4.1",
     "url-loader": "0.5.9",
     "webpack": "3.2.0",
-    "webpack-dev-server": "2.5.1"
+    "webpack-dev-server": "2.6.0"
   },
   "dependencies": {
     "t": "^0.5.1"
