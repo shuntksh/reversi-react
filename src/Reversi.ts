@@ -1,6 +1,6 @@
 const MAX_TURN_COUNT = 60;
 
-import computeNextMove from "./helpers/getNextMove";
+import computeNextMove from "./solvers/getNextMove";
 
 export interface Move {
     x: number;
