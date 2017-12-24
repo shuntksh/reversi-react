@@ -89,6 +89,18 @@
   left: 0;
 }
 
+:local(.white) {
+  width: 58px;
+  height: 58px;
+  background-repeat: no-repeat;
+  background-size: 58px 58px;
+  background-image: var(--white);
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 :local(.black::before) {
   background-image: var(--white);
   background-size: 58px 58px;
@@ -101,18 +113,6 @@
   top: 0;
   width: 58px;
   transform: translateZ(-5px);
-}
-
-:local(.white) {
-  width: 58px;
-  height: 58px;
-  background-repeat: no-repeat;
-  background-size: 58px 58px;
-  background-image: var(--white);
-  backface-visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 :local(.white::before) {
