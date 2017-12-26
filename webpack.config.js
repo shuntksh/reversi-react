@@ -132,7 +132,7 @@ if (process.env.NODE_ENV === "production") {
     config.module.rules.push({
         test: /\.tsx?$/,
         use: [
-            { loader: "react-hot-loader" },
+            { loader: "react-hot-loader/webpack" },
             { loader: "awesome-typescript-loader" },
         ],
         exclude: /(\.spec.ts$|node_modules)/,
