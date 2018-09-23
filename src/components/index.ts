@@ -1,6 +1,5 @@
-
-import { Board, BoardProps } from "./Board";
-import { Dot, Square, SquareProps } from "./Square";
+import { Board, Props as BoardProps } from "./Board";
+import { Dot, Props as SquareProps, Square } from "./Square";
 
 export { Board, BoardProps };
 export { Dot, Square, SquareProps };

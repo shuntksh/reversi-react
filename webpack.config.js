@@ -1,34 +1,13 @@
-/* tslint:disable */ 
+/* tslint:disable */
+
 "use strict";
 
 const path = require("path");
 
 const CheckerPlugin = require("awesome-typescript-loader").CheckerPlugin;
 const TsConfigPathsPlugin = require("awesome-typescript-loader").TsConfigPathsPlugin;
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
-
-// For CSSNext
-const cssnext = require("postcss-cssnext");
-const cssnano = require("cssnano");
-const reporter = require("postcss-reporter");
-const stylelint = require("stylelint");
-
-// PostCSS Plugin Configuration
-const plugins = () => ([
-    stylelint(),
-    cssnext({
-        browsers: [
-            ">1%",
-            "last 4 versions",
-            "Firefox ESR",
-            "not ie < 9",
-        ],
-    }),
-    cssnano({ autoprefixer: false, reduceIdents: false }),
-    reporter({ clearMessage: true, throwError: true }),
-]);
 
 // Webpack Configuraion
 const config = {
@@ -49,45 +28,45 @@ const config = {
 
     module: {
         rules: [
-            { 
-                test: /\.tsx?$/, 
-                enforce: 'pre',
-                loader: 'tslint-loader',
-                options: {
-                    emitErrors: true,
-                    failOnHint: true,
-                },
-            
+            // {
+            //     test: /\.tsx?$/,
+            //     enforce: "pre",
+            //     loader: "tslint-loader",
+            //     options: {
+            //         emitErrors: true,
+            //         failOnHint: true,
+            //     },
+            // },
+            {
+                test: /\.tsx?$/,
+                use: ["awesome-typescript-loader"],
+                exclude: /(\.spec.ts$|node_modules)/,
             },
             {
                 test: /\.(eot|woff|woff2|ttf|svg|png)$/,
-                use: ['url-loader?limit=100000'],
-            }
+                use: ["url-loader?limit=100000"],
+            },
         ],
     },
 
     plugins: [
         new TsConfigPathsPlugin(),
-        new ExtractTextPlugin({
-            filename: "[name].[chunkhash].css",
-            disable: false,
-            allChunks: true,           
-        }),
+
         new HtmlWebpackPlugin({
             template: "./src/index.html",
             inject: "body",
         }),
         new webpack.DefinePlugin({
             "process.env": {
-                "NODE_ENV": JSON.stringify(process.env.NODE_ENV || "").toLowerCase(),
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV || "").toLowerCase(),
             },
         }),
         new webpack.LoaderOptionsPlugin({
             options: {
                 tslint: {
                     failOnHint: true,
-                }
-            }
+                },
+            },
         }),
     ],
 };
@@ -96,61 +75,17 @@ const config = {
 // Production Configuration
 //
 if (process.env.NODE_ENV === "production") {
+    config.mode = "production";
     config.bail = true;
-    config.module.rules.push({
-        test: /\.tsx?$/,
-        use: ["awesome-typescript-loader"],
-        exclude: /(\.spec.ts$|node_modules)/,
-    });
 
-    config.module.rules.push({
-        test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-            fallback: "style-loader",
-            use: [
-                { loader: "css-loader", options: { importLoaders: 1, camelCase: true }},
-                { loader: "postcss-loader", options: { plugins }}
-            ],
-            publicPath: "/"
-        }),
-    });
-
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-        compress: { screw_ie8: true, warnings: false },
-        mangle: { screw_ie8: true },
-        output: { comments: false, screw_ie8: true },
-    }));
-
-//
-// Development Configuration
-//
+    //
+    // Development Configuration
+    //
 } else {
     // Include an alternative client for WebpackDevServer (for better error handling)
-    config.entry.push(require.resolve("react-dev-utils/webpackHotDevClient"));
+    config.mode = "development";
     config.output.filename = "[name].js";
     config.devtool = "cheap-module-source-map";
-    config.module.rules.push({
-        test: /\.tsx?$/,
-        use: [
-            { loader: "react-hot-loader/webpack" },
-            { loader: "awesome-typescript-loader" },
-        ],
-        exclude: /(\.spec.ts$|node_modules)/,
-    });
-
-    // Using style-loader for react hot loader
-    config.module.rules.push({
-        test: /\.css$/,
-        use: [
-            { loader: "style-loader" },
-            { loader: "css-loader", options: {
-                importLoaders: 1,
-                camelCase: true,
-                localIdentName: '[path][name]__[local]--[hash:base64:5]',
-            }},
-            { loader: "postcss-loader", options: { plugins }},
-        ],
-    });
 
     // Awesome-Typescript-Loader requires this to detect watch mode
     config.plugins.push(new CheckerPlugin());
