@@ -19,7 +19,6 @@ export interface Props {
     canPlace: boolean;
     hoveringColor?: Player;
     onClick?: (x: number, y: number) => any;
-    placeable?: SquareEnum;
 }
 
 export interface State {
@@ -43,12 +42,11 @@ export class Square extends React.PureComponent<Props, State> {
         const dotPlacement = this.getDot();
         return (
             <SquareStyled dotPlacement={dotPlacement} onClick={this.handleClick}>
-                {(!!this.props.value || !!this.props.placeable) && (
+                {!!this.props.value && (
                     <Stone
                         player={this.props.value}
                         floatIn={this.state.isNew}
                         to={this.state.flip ? this.props.value : undefined}
-                        placeable={this.props.placeable}
                     />
                 )}
             </SquareStyled>
@@ -87,7 +85,6 @@ export default Square;
 
 interface StoneProps {
     player: SquareEnum; // 1: white 2: black
-    placeable?: SquareEnum;
     floatIn?: boolean;
     to?: SquareEnum;
 }
@@ -100,7 +97,6 @@ const Stone = styled.div`
     backface-visibility: hidden;
     position: absolute;
     border-radius: 100%;
-    opacity: ${(props: StoneProps) => (props.placeable ? 0 : 1)};
     top: 7px;
     left: 7px;
     background-image: ${(props: StoneProps) =>
@@ -138,13 +134,6 @@ const Stone = styled.div`
                 animation-name: ${props.to === SquareEnum.black ? toBlack : toWhite};
             `;
         }
-        if (props.placeable) {
-            return css`
-                &:hover {
-                    opacity: 1;
-                }
-            `;
-        }
         return [];
     }};
 `;
@@ -164,11 +153,11 @@ interface SquareProps {
 const SquareStyled = styled.div`
     position: relative;
     background: #72ab4d;
-    min-width: 72px;
-    max-width: 72px;
-    min-height: 72px;
-    max-height: 72px;
-    border: 2px solid #000;
+    min-width: 74px;
+    max-width: 74px;
+    min-height: 74px;
+    max-height: 74px;
+    border: 1px solid #000;
     cursor: default;
     user-select: none;
     display: inline-block;

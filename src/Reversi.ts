@@ -63,7 +63,7 @@ export class Reversi implements Reversi {
         board[5][4] = Square.black;
         board[4][5] = Square.black;
         return board;
-    }
+    };
 
     constructor(player: Player = Player.black) {
         this.init(player);
@@ -77,23 +77,25 @@ export class Reversi implements Reversi {
         const ret = [];
         for (let y = 1; y < 9; y++) {
             const row = [];
-            for (let x = 1; x < 9; x++) { row.push(this.board[y][x]); }
+            for (let x = 1; x < 9; x++) {
+                row.push(this.board[y][x]);
+            }
             ret.push(row);
         }
         return ret;
     }
 
-    get finished(): boolean { return this.turnCount >= MAX_TURN_COUNT; }
+    get finished(): boolean {
+        return this.turnCount >= MAX_TURN_COUNT;
+    }
 
-    get score(): { black: number, white: number } {
+    get score(): { black: number; white: number } {
         const black = this.value
             .reduce((res, val) => res.concat(val), [])
-            .filter((v) => v === Square.black)
-            .length;
+            .filter(v => v === Square.black).length;
         const white = this.value
             .reduce((res, val) => res.concat(val), [])
-            .filter((v) => v === Square.white)
-            .length;
+            .filter(v => v === Square.white).length;
         return { black, white };
     }
 
@@ -101,7 +103,7 @@ export class Reversi implements Reversi {
      * Deep copying game state
      */
     public copy(game: Reversi): Reversi {
-        this.board = game.board.map((y) => [...y]);
+        this.board = game.board.map(y => [...y]);
         this.player = game.player;
         this.turn = game.turn;
         this.turnCount = game.turnCount;
@@ -126,17 +128,21 @@ export class Reversi implements Reversi {
         // Convert cordinate back to the original data structure.
         const _x = x + 1;
         const _y = y + 1;
-        if (!this.canPlaceStone(_x, _y, player)) { return false; }
+        if (!this.canPlaceStone(_x, _y, player)) {
+            return false;
+        }
         for (let yd = -1; yd <= 1; yd++) {
             for (let xd = -1; xd <= 1; xd++) {
-                if (yd === 0 && xd === 0) { continue; }
+                if (yd === 0 && xd === 0) {
+                    continue;
+                }
                 const count = this.countTurnableStones(_x, _y, xd, yd, player);
                 for (let cur = 1; cur <= count; cur++) {
-                    this.board[_y + cur * yd][_x + cur * xd] = (player as number);
+                    this.board[_y + cur * yd][_x + cur * xd] = player as number;
                 }
             }
         }
-        this.board[_y][_x] = (player as number);
+        this.board[_y][_x] = player as number;
 
         this.tickTurn(cb);
         return true;
@@ -159,14 +165,20 @@ export class Reversi implements Reversi {
      * and returns a number of stone that can be tuned (for given vector);
      */
     public countTurnableStones(
-        x: number, y: number, xd: number, yd: number, player: Player = this.turn,
+        x: number,
+        y: number,
+        xd: number,
+        yd: number,
+        player: Player = this.turn
     ): number {
-        const getValueAt = (c: number) => (this.board[y + c * yd][x + c * xd] as number);
+        const getValueAt = (c: number) => this.board[y + c * yd][x + c * xd] as number;
         const opponent = 3 - player;
         let cursor = 1;
         // Move cursor till it hits opponent. Otherwise it hits sentinel.
-        while (getValueAt(cursor) === opponent) { cursor++; }
-        return getValueAt(cursor) === player ? (cursor - 1) : 0;
+        while (getValueAt(cursor) === opponent) {
+            cursor++;
+        }
+        return getValueAt(cursor) === player ? cursor - 1 : 0;
     }
 
     /**
@@ -180,10 +192,14 @@ export class Reversi implements Reversi {
         }
 
         // Cordinate is outside of board area
-        if (!(x && y) || x < 1 || x > 8 || y < 1 || y > 9) { return false; }
+        if (!(x && y) || x < 1 || x > 8 || y < 1 || y > 9) {
+            return false;
+        }
 
         // Target already has a stone
-        if (this.board[y][x] !== Square.blank) { return false; }
+        if (this.board[y][x] !== Square.blank) {
+            return false;
+        }
 
         // Check against all 8 directions
         for (let yd = -1; yd <= 1; yd++) {
@@ -215,7 +231,9 @@ export class Reversi implements Reversi {
     }
 
     private tickTurn(cb?: () => any): void {
-        if (this.turnCount >= MAX_TURN_COUNT) { return this.finishGame(); }
+        if (this.turnCount >= MAX_TURN_COUNT) {
+            return this.finishGame();
+        }
         this.turn = 3 - this.turn;
         this.turnCount += 1;
         if (!this.canPlaceStoneAnywhere(this.turn)) {

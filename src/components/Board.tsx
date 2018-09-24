@@ -28,13 +28,12 @@ export interface Props {
     player?: Player;
     sound?: SoundEffect;
     values: SquareEnum[][];
-    placeable: SquareEnum[][];
     onClickSquare?: (x: number, y: number) => void;
 }
 
 export class Board extends React.Component<Props, {}> {
     public render() {
-        const { onClickSquare, player, values, placeable } = this.props;
+        const { onClickSquare, player, values } = this.props;
         return (
             <BoardOuter>
                 {values.map((row, idxY) => (
@@ -45,7 +44,6 @@ export class Board extends React.Component<Props, {}> {
                                 x={idxX}
                                 y={idxY}
                                 value={value}
-                                placeable={placeable[idxY][idxX]}
                                 canPlace={true}
                                 hoveringColor={player}
                                 onClick={onClickSquare}
