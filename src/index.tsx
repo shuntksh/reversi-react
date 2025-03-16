@@ -1,6 +1,16 @@
-import * as React from "react";
-import * as ReactDom from "react-dom";
+import { StrictMode } from "react";
+import ReactDOM from "react-dom/client";
+import { App } from "./App";
 
-import Container from "./Container";
+const rootElement = document.getElementById("main");
 
-ReactDom.render(<Container/>, document.getElementById("main"));
+// Check if the root element exists
+if (rootElement) {
+	ReactDOM.createRoot(rootElement).render(
+		<StrictMode>
+			<App />
+		</StrictMode>,
+	);
+} else {
+	console.error("Root element not found");
+}

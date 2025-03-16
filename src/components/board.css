@@ -1,0 +1,10 @@
+.board-outer {
+  border: solid 5px #000;
+  width: 608px;
+  height: 608px;
+}
+
+.board-row {
+  display: block;
+  height: 76px;
+}

@@ -1,6 +1,6 @@
 const MAX_TURN_COUNT = 60;
 
-import computeNextMove from "./solvers/getNextMove";
+import computeNextMove from "./solver";
 
 export interface Move {
     x: number;
@@ -24,6 +24,8 @@ export interface Reversi {
     player: Player;
     turn: Player;
     turnCount: number;
+    aiLevel: number;
+    thinking: boolean;
 }
 
 /**
@@ -44,7 +46,7 @@ export interface Reversi {
  *   1: black
  *   2: white
  */
-export class Reversi implements Reversi {
+export class Reversi {
     public static initBoard = (): Square[][] => {
         const board = [];
         for (let y = 0; y < 10; y++) {
@@ -65,8 +67,11 @@ export class Reversi implements Reversi {
         return board;
     };
 
-    constructor(player: Player = Player.black) {
-        this.init(player);
+    private aiLevel = 3;
+    public thinking: boolean = false;
+
+    constructor(player: Player = Player.black, aiLevel: number = 3) {
+        this.init(player, aiLevel);
     }
 
     /**
@@ -107,17 +112,21 @@ export class Reversi implements Reversi {
         this.player = game.player;
         this.turn = game.turn;
         this.turnCount = game.turnCount;
+        this.aiLevel = game.aiLevel;
+        this.thinking = game.thinking;
         return this;
     }
 
     /**
      * Reset game
      */
-    public init(player = Player.black): void {
+    public init(player = Player.black, aiLevel = 3): void {
         this.board = Reversi.initBoard();
         this.player = player;
         this.turn = Player.black;
         this.turnCount = 1;
+        this.aiLevel = aiLevel;
+        this.thinking = false;
     }
 
     /**
@@ -240,7 +249,28 @@ export class Reversi implements Reversi {
             return this.tickTurn(cb);
         }
         if (this.turn !== this.player) {
-            setTimeout(() => computeNextMove(this, cb), 750);
+            // Set thinking state immediately
+            this.thinking = true;
+
+            // Ensure AI takes at least 50ms to respond
+            const startTime = Date.now();
+
+            setTimeout(() => {
+                computeNextMove(this, () => {
+                    // Calculate elapsed time
+                    const elapsedTime = Date.now() - startTime;
+
+                    // If AI responded too quickly, wait until minimum time has passed
+                    const remainingTime = Math.max(0, 50 - elapsedTime);
+
+                    setTimeout(() => {
+                        this.thinking = false;
+                        if (typeof cb === "function") {
+                            cb();
+                        }
+                    }, remainingTime);
+                }, this.aiLevel);
+            }, 0);
         }
     }
 

@@ -6,55 +6,20 @@
         "type": "git",
         "url": "git@github.com-pub:shuntksh/reversi-react.git"
     },
-    "author": "Shun <shuntksh@gmail.com>",
     "license": "MIT",
-    "prettier": {
-        "printWidth": 100,
-        "tabWidth": 4,
-        "trailingComma": "es5"
-    },
     "scripts": {
         "compile": "rimraf ./build && cross-env NODE_ENV=production webpack",
-        "npm-check": "npm-check --skip-unused",
         "start": "cross-env NODE_ENV=development webpack-dev-server --hot --inline"
     },
     "devDependencies": {
-        "@types/chai": "^4.0.10",
-        "@types/mocha": "^5.2.5",
-        "@types/react": "^16.0.31",
-        "@types/react-addons-test-utils": "^0.14.22",
-        "@types/react-dom": "^16.0.3",
-        "@types/styled-components": "^3.0.1",
-        "awesome-typescript-loader": "^5.2.1",
-        "chai": "4.1.2",
-        "concurrently": "^4.0.1",
-        "cross-env": "^5.1.3",
-        "file-loader": "^2.0.0",
-        "html-webpack-plugin": "^3.2.0",
-        "mkdirp": "0.5.1",
-        "mocha": "^5.2.0",
-        "npm-check": "^5.9.0",
-        "nsp": "3.1.0",
-        "prettier": "^1.14.3",
-        "react-dev-utils": "^5.0.2",
-        "react-hot-loader": "^4.3.11",
-        "rimraf": "2.6.2",
-        "stylelint": "^9.5.0",
-        "stylelint-config-standard": "^18.0.0",
-        "ts-node": "^7.0.1",
-        "tslint": "^5.11.0",
-        "tslint-config-prettier": "^1.15.0",
-        "tslint-loader": "^3.6.0",
-        "tslint-react": "^3.6.0",
-        "typescript": "^3.0.3",
-        "url-loader": "^1.1.1",
-        "webpack": "^4.19.1",
-        "webpack-cli": "^3.1.0",
-        "webpack-dev-server": "^3.1.8"
+        "@biomejs/biome": "^1.9.4",
+        "@types/react": "^19.0.10",
+        "@types/react-dom": "^19.0.4",
+        "cross-env": "^7.0.3",
+        "typescript": "^5.8.2"
     },
     "dependencies": {
-        "react": "^16.2.0",
-        "react-dom": "^16.2.0",
-        "styled-components": "^3.4.9"
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
     }
 }

@@ -1,8 +1,9 @@
 import * as React from "react";
-import styled from "styled-components";
 
-import { Square as SquareEnum } from "../Reversi";
-import { Player, SoundEffect, Square } from "./index";
+import "./board.css";
+
+import { Square as SquareEnum } from "../game/reversi";
+import { Player, type SoundEffect, Stone } from "./index";
 
 /**
  * Board are cordinated in x-y axis addressed from 0 to 7 and caller
@@ -31,40 +32,26 @@ export interface Props {
     onClickSquare?: (x: number, y: number) => void;
 }
 
-export class Board extends React.Component<Props, {}> {
-    public render() {
-        const { onClickSquare, player, values } = this.props;
-        return (
-            <BoardOuter>
-                {values.map((row, idxY) => (
-                    <Row key={idxY}>
-                        {row.map((value, idxX) => (
-                            <Square
-                                key={idxX}
-                                x={idxX}
-                                y={idxY}
-                                value={value}
-                                canPlace={true}
-                                hoveringColor={player}
-                                onClick={onClickSquare}
-                            />
-                        ))}
-                    </Row>
-                ))}
-            </BoardOuter>
-        );
-    }
-}
+export const Board: React.FC<Props> = ({ onClickSquare, player, values }) => {
+    return (
+        <div className="board-outer">
+            {values.map((row, idxY) => (
+                <div className="board-row" key={idxY}>
+                    {row.map((value, idxX) => (
+                        <Stone
+                            key={idxX}
+                            x={idxX}
+                            y={idxY}
+                            value={value}
+                            canPlace={true}
+                            hoveringColor={player}
+                            onClick={onClickSquare}
+                        />
+                    ))}
+                </div>
+            ))}
+        </div>
+    );
+};
 
 export default Board;
-
-const BoardOuter = styled.div`
-    border: solid 5px #000;
-    width: 608px;
-    height: 608px;
-`;
-
-const Row = styled.div`
-    display: block;
-    height: 76px;
-`;

@@ -1,7 +1,5 @@
 # reversi-react
 
-[![build status](https://travis-ci.org/shuntksh/reversi-react.svg?branch=master)](https://travis-ci.org/shuntksh/reversi-react)
-
 <p align="center">
   <img alt="Square" width="480px" src="https://github.com/shuntksh/reversi-react/blob/master/doc/board-demo.gif">
 </p>

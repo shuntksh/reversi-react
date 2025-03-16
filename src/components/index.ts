@@ -1,8 +1,5 @@
-import { Board, Props as BoardProps } from "./Board";
-import { Dot, Props as SquareProps, Square } from "./Square";
-
-export { Board, BoardProps };
-export { Dot, Square, SquareProps };
+export { Board, type Props as BoardProps } from "./board";
+export { Dot, Stone, type Props as StoneProps } from "./stone";
 
 export enum Player {
     black = 1,

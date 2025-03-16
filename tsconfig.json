@@ -1,33 +1,30 @@
 {
-    "version": "2.0.0",
     "compilerOptions": {
-        "declaration": false,
-        "experimentalDecorators": true,
-        "jsx": "react",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "outDir": "dist/",
-        "removeComments": false,
-        "sourceMap": false,
-        "strictNullChecks": true,
-        "stripInternal": true,
-        "target": "es5",
-        "lib": ["es2016", "dom"]
+        "target": "ES2022",
+        "allowJs": true,
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "moduleDetection": "force",
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "verbatimModuleSyntax": true,
+        "incremental": true,
+        "lib": [
+            "esnext",
+            "dom",
+            "dom.iterable",
+            "webworker"
+        ],
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "noEmit": true,
+        "strict": true,
+        "noImplicitOverride": true,
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "preserve"
     },
     "include": [
-        "./index.d.ts",
         "src/**/*.tsx",
         "src/**/*.ts"
-    ],
-    "exclude": [
-        "config",
-        "node_modules",
-        "dist",
-        "src/**/*.spec.t*"
     ]
 }
