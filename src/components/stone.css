@@ -48,15 +48,9 @@
 }
 
 .stone {
-  width: 58px;
-  height: 58px;
   background-size: 58px 58px;
   background-repeat: no-repeat;
   backface-visibility: hidden;
-  position: absolute;
-  border-radius: 100%;
-  top: 7px;
-  left: 7px;
 }
 
 .stone.black {

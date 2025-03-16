@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { Player, Square as SquareEnum } from "../game/reversi";
+import { type Player, Square as SquareEnum } from "../game/reversi";
 import "./stone.css";
 
 export enum Dot {
-  none,
-  topLeft,
-  topRight,
-  bottomLeft,
-  bottomRight,
+  none = "none",
+  topLeft = "topLeft",
+  topRight = "topRight",
+  bottomLeft = "bottomLeft",
+  bottomRight = "bottomRight",
 }
 
 export interface Props {
@@ -71,12 +71,14 @@ export const Stone = (props: Props) => {
 
   return (
     <div
-      className={`square ${dot !== Dot.none ? `dot-${dot}` : ""}`}
+      className={`square relative bg-green-500 border-[1px] cursor-default select-none inline-block m-0 h-[74px] w-[74px] dot-${dot}`}
       onClick={handleClick}
+      onKeyDown={handleClick}
+      data-dot={dot}
     >
       {value !== SquareEnum.blank && (
         <div
-          className={`stone ${value === SquareEnum.black ? "black" : "white"}`}
+          className={`stone absolute radius-full top-[7px] left-[7px] w-[58px] h-[58px]  ${value === SquareEnum.black ? "black" : "white"}`}
           style={getStoneStyle()}
         />
       )}

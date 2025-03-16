@@ -1,13 +1,11 @@
-import * as React from "react";
+import type React from "react";
 
-import "./board.css";
-
-import { Square as SquareEnum } from "../game/reversi";
-import { Player, type SoundEffect, Stone } from "./index";
+import type { Square as SquareEnum } from "../game/reversi";
+import { type Player, type SoundEffect, Stone } from "./index";
 
 /**
- * Board are cordinated in x-y axis addressed from 0 to 7 and caller
- * shall initialize two dimentional vector with 0.
+ * Board are coordinated in x-y axis addressed from 0 to 7 and caller
+ * shall initialize two dimensional vector with 0.
  *
  *    value[y][x]=
  *      0 1 2 3 4 5 6 7 (x)
@@ -21,7 +19,7 @@ import { Player, type SoundEffect, Stone } from "./index";
  * @param animate - Perform flip animation when true (default=true)
  * @param player - A number that specify player of the turn (1 = black, 2 = white)
  * @param sound - An object to specify audio URL for each player
- * @param value - A two dimentional vector value representing a game
+ * @param value - A two dimensional vector value representing a game
  * @param onClickSquare - A callback function when user clicks a board
  */
 export interface Props {
@@ -34,12 +32,12 @@ export interface Props {
 
 export const Board: React.FC<Props> = ({ onClickSquare, player, values }) => {
     return (
-        <div className="board-outer">
+        <div className="border-2 border-black flex-row gap-0">
             {values.map((row, idxY) => (
-                <div className="board-row" key={idxY}>
+                <div className="h-[74px] p-0 m-0 flex-row" key={idxY}>
                     {row.map((value, idxX) => (
                         <Stone
-                            key={idxX}
+                            key={`${idxX}-${idxY}`}
                             x={idxX}
                             y={idxY}
                             value={value}

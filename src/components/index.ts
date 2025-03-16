@@ -1,6 +1,6 @@
 export { Board, type Props as BoardProps } from "./board";
 export { Dot, Stone, type Props as StoneProps } from "./stone";
-
+export { ThinkingOverlay } from "./thinking";
 export enum Player {
     black = 1,
     white = 2,

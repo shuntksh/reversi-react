@@ -1,7 +1,7 @@
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 
-import { Board, Player } from "./components";
+import { Board, Player, ThinkingOverlay } from "./components";
 import type { Square } from "./game/reversi";
 import Reversi from "./game/reversi";
 
@@ -16,76 +16,6 @@ export interface ContainerState {
     thinking: boolean;
 }
 
-// Thinking overlay component
-const ThinkingOverlay: React.FC = () => (
-    <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 100,
-    }}>
-        <div style={{
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-        }}>
-            <div style={{ marginBottom: '10px', fontSize: '18px', fontWeight: 'bold' }}>
-                AI is thinking...
-            </div>
-            <div className="thinking-animation" style={{
-                display: 'flex',
-                justifyContent: 'center',
-            }}>
-                <div style={{
-                    width: '12px',
-                    height: '12px',
-                    backgroundColor: '#333',
-                    borderRadius: '50%',
-                    margin: '0 4px',
-                    animation: 'pulse 1s infinite ease-in-out',
-                    animationDelay: '0s',
-                }}/>
-                <div style={{
-                    width: '12px',
-                    height: '12px',
-                    backgroundColor: '#333',
-                    borderRadius: '50%',
-                    margin: '0 4px',
-                    animation: 'pulse 1s infinite ease-in-out',
-                    animationDelay: '0.2s',
-                }}/>
-                <div style={{
-                    width: '12px',
-                    height: '12px',
-                    backgroundColor: '#333',
-                    borderRadius: '50%',
-                    margin: '0 4px',
-                    animation: 'pulse 1s infinite ease-in-out',
-                    animationDelay: '0.4s',
-                }}/>
-            </div>
-            <style>
-                {`
-                @keyframes pulse {
-                    0%, 100% { transform: scale(0.8); opacity: 0.5; }
-                    50% { transform: scale(1.2); opacity: 1; }
-                }
-                `}
-            </style>
-        </div>
-    </div>
-);
-
 export const Game: React.FC = () => {
     const [gameState, setGameState] = useState<ContainerState>({
         score: { white: 2, black: 2 },
@@ -93,7 +23,7 @@ export const Game: React.FC = () => {
         turnCount: game.turnCount,
         value: game.value,
         aiLevel: 3,
-        thinking: false
+        thinking: false,
     });
 
     const updateBoard = useCallback(() => {
@@ -103,36 +33,38 @@ export const Game: React.FC = () => {
             turnCount: game.turnCount,
             value: game.value,
             aiLevel: gameState.aiLevel,
-            thinking: game.thinking
+            thinking: game.thinking,
         });
     }, [gameState.aiLevel]);
 
-    // Update the UI when the thinking state changes
     useEffect(() => {
         const thinkingInterval = setInterval(() => {
-            // Update the game state if thinking status changed
             if (gameState.thinking !== game.thinking) {
                 updateBoard();
             }
-        }, 16); // Check frequently for smoother transitions (60fps)
-        
+        }, 16);
         return () => clearInterval(thinkingInterval);
     }, [gameState.thinking, updateBoard]);
 
-    const handleClick = useCallback((x: number, y: number) => {
-        // Only allow moves when AI is not thinking
-        if (!gameState.thinking) {
-            game.placeStone(x, y, undefined, updateBoard);
-            updateBoard();
-        }
-    }, [gameState.thinking, updateBoard]);
+    const handleClick = useCallback(
+        (x: number, y: number) => {
+            if (!gameState.thinking) {
+                game.placeStone(x, y, undefined, updateBoard);
+                updateBoard();
+            }
+        },
+        [gameState.thinking, updateBoard]
+    );
 
-    const handleAILevelChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-        const newLevel = Number.parseInt(e.target.value, 10);
-        setGameState(prev => ({ ...prev, aiLevel: newLevel }));
-        game.init(Player.black, newLevel);
-        updateBoard();
-    }, [updateBoard]);
+    const handleAILevelChange = useCallback(
+        (e: React.ChangeEvent<HTMLSelectElement>) => {
+            const newLevel = Number.parseInt(e.target.value, 10);
+            setGameState((prev) => ({ ...prev, aiLevel: newLevel }));
+            game.init(Player.black, newLevel);
+            updateBoard();
+        },
+        [updateBoard]
+    );
 
     const resetGame = useCallback(() => {
         game.init(Player.black, gameState.aiLevel);
@@ -145,35 +77,95 @@ export const Game: React.FC = () => {
     }, [gameState.aiLevel, updateBoard]);
 
     return (
-        <div style={{ display: "block", marginLeft: "40px", position: "relative" }}>
-            <div style={{ marginBottom: "10px" }}>
-                <div>
-                    {gameState.turn === 1 ? "BLACK" : "WHITE"} - {gameState.turnCount} - score: B=
-                    {gameState.score.black} / W=
-                    {gameState.score.white}
+        <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4">
+            {/* Game Container with Dynamic Sizing */}
+            <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-[620px] w-full sm:max-w-[650px] md:max-w-[700px]">
+                {/* Header Section: Turn, Score, and Turn Count */}
+                <div className="text-center mb-6">
+                    <h1 className="text-3xl font-extrabold text-gray-800 mb-2">
+                        Reversi
+                    </h1>
+                    <div className="flex justify-center items-center space-x-4">
+                        <span
+                            className={`text-xl font-semibold ${
+                                gameState.turn === 1 ? "text-gray-900" : "text-gray-400"
+                            } transition-colors duration-300`}
+                        >
+                            BLACK: {gameState.score.black}
+                        </span>
+                        <span className="text-xl font-semibold text-gray-600">vs</span>
+                        <span
+                            className={`text-xl font-semibold ${
+                                gameState.turn === 2 ? "text-gray-900" : "text-gray-400"
+                            } transition-colors duration-300`}
+                        >
+                            WHITE: {gameState.score.white}
+                        </span>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">
+                        Turn: {gameState.turnCount} |{" "}
+                        <span
+                            className={`font-bold ${
+                                gameState.turn === 1 ? "text-gray-900" : "text-gray-400"
+                            }`}
+                        >
+                            {gameState.turn === 1 ? "Black's Turn" : "White's Turn"}
+                        </span>
+                    </p>
                 </div>
-                <div style={{ marginTop: "10px" }}>
-                    <label htmlFor="ai-level">AI Level: </label>
-                    <select 
-                        id="ai-level" 
-                        value={gameState.aiLevel} 
-                        onChange={handleAILevelChange}
-                        style={{ marginRight: "10px" }}
+
+                {/* Board Wrapper with Fixed-Width Centering */}
+                <div className="flex justify-center mb-6">
+                    <div className="w-[600px] h-[600px]">
+                        <Board values={gameState.value} onClickSquare={handleClick} />
+                    </div>
+                </div>
+
+                {/* Controls Section: AI Level and Reset Button */}
+                <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <div className="flex items-center space-x-2">
+                        <label
+                            htmlFor="ai-level"
+                            className="text-sm font-medium text-gray-700"
+                        >
+                            AI Level:
+                        </label>
+                        <select
+                            id="ai-level"
+                            value={gameState.aiLevel}
+                            onChange={handleAILevelChange}
+                            disabled={gameState.thinking}
+                            className={`p-2 rounded-lg border-2 ${
+                                gameState.thinking
+                                    ? "border-gray-300 bg-gray-100 cursor-not-allowed"
+                                    : "border-indigo-500 hover:border-indigo-600"
+                            } focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-200 text-gray-800`}
+                        >
+                            <option value="0">0 - Very Easy</option>
+                            <option value="1">1 - Easy</option>
+                            <option value="2">2 - Medium</option>
+                            <option value="3">3 - Standard</option>
+                            <option value="4">4 - Hard</option>
+                            <option value="5">5 - Expert</option>
+                        </select>
+                    </div>
+                    <button
+                        onClick={resetGame}
                         disabled={gameState.thinking}
+                        type="button"
+                        className={`px-4 py-2 rounded-lg font-semibold text-white transition-all duration-200 transform hover:scale-105 ${
+                            gameState.thinking
+                                ? "bg-gray-400 cursor-not-allowed"
+                                : "bg-red-500 hover:bg-red-600 shadow-lg hover:shadow-xl"
+                        }`}
                     >
-                        <option value="0">0 - Very Easy</option>
-                        <option value="1">1 - Easy</option>
-                        <option value="2">2 - Medium</option>
-                        <option value="3">3 - Standard</option>
-                        <option value="4">4 - Hard</option>
-                        <option value="5">5 - Expert</option>
-                    </select>
-                    <button onClick={resetGame} disabled={gameState.thinking} type="button">Reset Game</button>
+                        Reset Game
+                    </button>
                 </div>
             </div>
-            <Board values={gameState.value} onClickSquare={handleClick} />
+
+            {/* Thinking Overlay (if applicable) */}
             {gameState.thinking && <ThinkingOverlay />}
         </div>
     );
 };
-
