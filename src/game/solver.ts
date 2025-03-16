@@ -1,7 +1,5 @@
-/* tslint:disable */
-import type { Move } from "./reversi";
-import { Player, Reversi, Square } from "./reversi";
-
+import type { Move, Square } from "./reversi";
+import { Player, Reversi } from "./reversi";
 interface BestMove extends Move {
     score: number;
 }
@@ -21,11 +19,11 @@ const WEIGHTS = [
 const transpositionTable = new Map<string, { score: number; depth: number; move: Move }>();
 const MAX_TABLE_SIZE = 10000;
 
-const getBoardKey = (board: Square[][], player: Player): string => {
+const getBoardKey = (board: Square[][], player: number): string => {
     return `${player}${board.flat().join("")}`;
 };
 
-const evaluateBoard = (game: Reversi, player: Player): number => {
+const evaluateBoard = (game: Reversi, player: number): number => {
     const board = game.value;
     const totalPieces = game.score.black + game.score.white;
     let score = 0;
@@ -91,32 +89,34 @@ const minMax = (
 
     const key = getBoardKey(game.value, currentPlayer) + depth;
     if (transpositionTable.has(key)) {
-        const entry = transpositionTable.get(key)!;
-        if (entry.depth >= depth) return { ...entry.move, score: entry.score };
+        const entry = transpositionTable.get(key);
+        if (entry && entry.depth >= depth) return { ...entry.move, score: entry.score };
     }
 
-    let bestMove: BestMove = { x: -1, y: -1, score: maximizingPlayer ? -Infinity : Infinity };
+    let bestMove: BestMove = { x: -1, y: -1, score: maximizingPlayer ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY };
     const gameCopy = new Reversi().copy(game); // Reuse this copy
 
+
+    let [_alpha, _beta] = [alpha, beta];
     for (const move of possibleMoves) {
         gameCopy.copy(game); // Reset to original state
         gameCopy.placeStone(move.x - 1, move.y - 1);
 
-        const result = minMax(gameCopy, depth - 1, alpha, beta, !maximizingPlayer, startTime, timeLimit);
+        const result = minMax(gameCopy, depth - 1, _alpha, _beta, !maximizingPlayer, startTime, timeLimit);
 
         if (maximizingPlayer) {
             if (result.score > bestMove.score) {
                 bestMove = { x: move.x - 1, y: move.y - 1, score: result.score };
             }
-            alpha = Math.max(alpha, result.score);
+            _alpha = Math.max(_alpha, result.score);
         } else {
             if (result.score < bestMove.score) {
                 bestMove = { x: move.x - 1, y: move.y - 1, score: result.score };
             }
-            beta = Math.min(beta, result.score);
+            _beta = Math.min(_beta, result.score);
         }
 
-        if (beta <= alpha) break; // Prune
+        if (_beta <= _alpha) break; // Prune
     }
 
     if (transpositionTable.size < MAX_TABLE_SIZE) {
@@ -131,11 +131,11 @@ const iterativeDeepening = (game: Reversi, level: number, timeLimit: number): Be
     const startTime = Date.now();
     const totalPieces = game.score.black + game.score.white;
     const maxDepth = Math.min(level + 1, Math.max(2, Math.floor(totalPieces / 10))); // Dynamic depth
-    let bestMove: BestMove = { x: -1, y: -1, score: -Infinity };
+    let bestMove: BestMove = { x: -1, y: -1, score: Number.NEGATIVE_INFINITY };
 
     for (let depth = 1; depth <= maxDepth; depth++) {
         if (Date.now() - startTime > timeLimit * 0.9) break;
-        const result = minMax(game, depth, -Infinity, Infinity, true, startTime, timeLimit);
+        const result = minMax(game, depth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true, startTime, timeLimit);
         if (result.x !== -1) bestMove = result;
     }
 
@@ -143,7 +143,7 @@ const iterativeDeepening = (game: Reversi, level: number, timeLimit: number): Be
 };
 
 // Main solver with adjustable difficulty
-export const solver = (game: Reversi, level: number = 3): BestMove => {
+export const solver = (game: Reversi, level = 3): BestMove => {
     if (level === 0) return random(game);
 
     const possibleMoves = game.possibleMoves();
@@ -158,7 +158,7 @@ export const solver = (game: Reversi, level: number = 3): BestMove => {
     return iterativeDeepening(game, level, timeLimit);
 };
 
-export const computeNextMove = (game: Reversi, cb?: () => any, level: number = 3): void => {
+export const computeNextMove = (game: Reversi, cb?: () => void, level = 3): void => {
     const _game = new Reversi().copy(game);
     setTimeout(() => {
         const move = solver(_game, level);

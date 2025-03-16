@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { App } from "./App";
+import { Game } from "./game";
 
 const rootElement = document.getElementById("main");
 
@@ -8,7 +8,7 @@ const rootElement = document.getElementById("main");
 if (rootElement) {
 	ReactDOM.createRoot(rootElement).render(
 		<StrictMode>
-			<App />
+			<Game />
 		</StrictMode>,
 	);
 } else {

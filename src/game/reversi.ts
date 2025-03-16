@@ -19,14 +19,6 @@ export enum Square {
     white = 2,
 }
 
-export interface Reversi {
-    board: Square[][];
-    player: Player;
-    turn: Player;
-    turnCount: number;
-    aiLevel: number;
-    thinking: boolean;
-}
 
 /**
  * y/x --------------------------->
@@ -67,10 +59,14 @@ export class Reversi {
         return board;
     };
 
-    private aiLevel = 3;
-    public thinking: boolean = false;
+    public board: Square[][] = [];
+    public player: Player = Player.black;
+    public turn: Player = Player.black;
+    public turnCount = 1;
+    public thinking = false;
+    public aiLevel = 3;
 
-    constructor(player: Player = Player.black, aiLevel: number = 3) {
+    constructor(player: Player = Player.black, aiLevel = 3) {
         this.init(player, aiLevel);
     }
 
@@ -122,7 +118,6 @@ export class Reversi {
      */
     public init(player = Player.black, aiLevel = 3): void {
         this.board = Reversi.initBoard();
-        this.player = player;
         this.turn = Player.black;
         this.turnCount = 1;
         this.aiLevel = aiLevel;
@@ -133,7 +128,7 @@ export class Reversi {
      * Function that places a stone into a board and turn that pieces. Return false
      * if the target location is invalid (cannot place stone).
      */
-    public placeStone(x: number, y: number, player: Player = this.turn, cb?: () => any): boolean {
+    public placeStone(x: number, y: number, player: Player = this.turn, cb?: () => void): boolean {
         // Convert cordinate back to the original data structure.
         const _x = x + 1;
         const _y = y + 1;
@@ -239,14 +234,16 @@ export class Reversi {
         return !!this.possibleMoves(player).length;
     }
 
-    private tickTurn(cb?: () => any): void {
+    private tickTurn(cb?: () => void): void {
         if (this.turnCount >= MAX_TURN_COUNT) {
-            return this.finishGame();
+            this.finishGame();
+            return;
         }
         this.turn = 3 - this.turn;
         this.turnCount += 1;
         if (!this.canPlaceStoneAnywhere(this.turn)) {
-            return this.tickTurn(cb);
+            this.tickTurn(cb);
+            return;
         }
         if (this.turn !== this.player) {
             // Set thinking state immediately

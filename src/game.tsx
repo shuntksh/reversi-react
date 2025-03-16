@@ -1,13 +1,14 @@
-import * as React from "react";
+import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 
-import { Board } from "./components";
-import Reversi, { Player, Square as SquareEnum } from "./game/reversi";
+import { Board, Player } from "./components";
+import type { Square } from "./game/reversi";
+import Reversi from "./game/reversi";
 
 const game = new Reversi();
 
 export interface ContainerState {
-    value: SquareEnum[][];
+    value: Square[][];
     turn: number;
     turnCount: number;
     score: { black: number; white: number };
@@ -53,7 +54,7 @@ const ThinkingOverlay: React.FC = () => (
                     margin: '0 4px',
                     animation: 'pulse 1s infinite ease-in-out',
                     animationDelay: '0s',
-                }}></div>
+                }}/>
                 <div style={{
                     width: '12px',
                     height: '12px',
@@ -62,7 +63,7 @@ const ThinkingOverlay: React.FC = () => (
                     margin: '0 4px',
                     animation: 'pulse 1s infinite ease-in-out',
                     animationDelay: '0.2s',
-                }}></div>
+                }}/>
                 <div style={{
                     width: '12px',
                     height: '12px',
@@ -71,7 +72,7 @@ const ThinkingOverlay: React.FC = () => (
                     margin: '0 4px',
                     animation: 'pulse 1s infinite ease-in-out',
                     animationDelay: '0.4s',
-                }}></div>
+                }}/>
             </div>
             <style>
                 {`
@@ -85,7 +86,7 @@ const ThinkingOverlay: React.FC = () => (
     </div>
 );
 
-export const App: React.FC = () => {
+export const Game: React.FC = () => {
     const [gameState, setGameState] = useState<ContainerState>({
         score: { white: 2, black: 2 },
         turn: game.turn,
@@ -127,7 +128,7 @@ export const App: React.FC = () => {
     }, [gameState.thinking, updateBoard]);
 
     const handleAILevelChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-        const newLevel = parseInt(e.target.value, 10);
+        const newLevel = Number.parseInt(e.target.value, 10);
         setGameState(prev => ({ ...prev, aiLevel: newLevel }));
         game.init(Player.black, newLevel);
         updateBoard();
@@ -167,7 +168,7 @@ export const App: React.FC = () => {
                         <option value="4">4 - Hard</option>
                         <option value="5">5 - Expert</option>
                     </select>
-                    <button onClick={resetGame} disabled={gameState.thinking}>Reset Game</button>
+                    <button onClick={resetGame} disabled={gameState.thinking} type="button">Reset Game</button>
                 </div>
             </div>
             <Board values={gameState.value} onClickSquare={handleClick} />
