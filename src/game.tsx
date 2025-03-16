@@ -22,7 +22,7 @@ export const Game: React.FC = () => {
         turn: game.turn,
         turnCount: game.turnCount,
         value: game.value,
-        aiLevel: 3,
+        aiLevel: 1,
         thinking: false,
     });
 
@@ -32,10 +32,10 @@ export const Game: React.FC = () => {
             turn: game.turn,
             turnCount: game.turnCount,
             value: game.value,
-            aiLevel: gameState.aiLevel,
+            aiLevel: game.aiLevel,
             thinking: game.thinking,
         });
-    }, [gameState.aiLevel]);
+    }, []);
 
     useEffect(() => {
         const thinkingInterval = setInterval(() => {

@@ -1,7 +1,7 @@
 import type React from "react";
 
 import type { Square as SquareEnum } from "../game/reversi";
-import { type Player, type SoundEffect, Stone } from "./index";
+import { type Player, type SoundEffect, Square } from "./index";
 
 /**
  * Board are coordinated in x-y axis addressed from 0 to 7 and caller
@@ -32,12 +32,12 @@ export interface Props {
 
 export const Board: React.FC<Props> = ({ onClickSquare, player, values }) => {
     return (
-        <div className="border-2 border-black flex-row gap-0">
+        <div className="border-2 border-black flex-row flex-0 w-[596px] gap-0">
             {values.map((row, idxY) => (
-                <div className="h-[74px] p-0 m-0 flex-row" key={idxY}>
+                <div className="h-[74px] p-0 m-0 flex-row" key={`row-${idxY.toString()}`}>
                     {row.map((value, idxX) => (
-                        <Stone
-                            key={`${idxX}-${idxY}`}
+                        <Square
+                            key={`cell-${idxX.toString()}-${idxY.toString()}`}
                             x={idxX}
                             y={idxY}
                             value={value}

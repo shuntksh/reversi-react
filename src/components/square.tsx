@@ -19,7 +19,7 @@ export interface Props {
   onClick?: (x: number, y: number) => void;
 }
 
-export const Stone = (props: Props) => {
+export const Square = (props: Props) => {
   const { x, y, value, onClick } = props;
   const [flip, setFlip] = useState(false);
   const [isNew, setIsNew] = useState(false);
