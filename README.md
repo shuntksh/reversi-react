@@ -11,7 +11,11 @@ An attempt to create an example React application something other than Todo app.
   <img alt="Diagram" width="50%" src="doc/component-diagram.png">
 </p>
 
+
+### `Reversi` - game engine
 The Reversi game engine is implemented as a single Reversi class in TypeScript, managing a 10x10 board with sentinel guards framing an 8x8 playable grid. This design simplifies boundary checks and move validation. Game state handling is optimized for performance: instead of deep-copying the 10x10 board (O(100) per operation), we modify it in-place with placeStone, tracking changes in a lightweight {x, y, prev} array, and revert via undoMove. This reduces memory overhead and speeds up recursive exploration, critical for the AI. The board state, turn tracking, and scoring are encapsulated cleanly, with methods like possibleMoves (O(64 * 8) worst-case) providing fast move generation.
+
+### `Solver` - MinMax-base game solver
 
 The solver leverages a minmax algorithm with alpha-beta pruning for efficient move selection, enhanced by iterative deepening to adapt search depth dynamically (max level + 1, capped by piece count). Move evaluation combines static positional weights (favoring corners), mobility in the early game, and disc differential in the endgame, all computed in evaluateBoard (O(64)). Performance is boosted by a transposition table (capped at 10,000 entries) to cache scores and move ordering based on weight heuristics, reducing the branching factor. For a typical level-3 AI, it evaluates moves within a 400ms time limit, balancing computational cost with strategic depth.
 
