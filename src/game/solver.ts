@@ -1,10 +1,10 @@
 import type { Move, Square } from "./reversi";
 import { Player, Reversi } from "./reversi";
+
 interface BestMove extends Move {
     score: number;
 }
 
-// Precomputed weights for board positions (8x8, no sentinels)
 const WEIGHTS = [
     [100, -20, 10, 5, 5, 10, -20, 100],
     [-20, -30, -5, -5, -5, -5, -30, -20],
@@ -28,7 +28,6 @@ const evaluateBoard = (game: Reversi, player: number): number => {
     const totalPieces = game.score.black + game.score.white;
     let score = 0;
 
-    // Static position weights
     for (let y = 0; y < 8; y++) {
         for (let x = 0; x < 8; x++) {
             if (board[y][x] === player) {
@@ -39,14 +38,11 @@ const evaluateBoard = (game: Reversi, player: number): number => {
         }
     }
 
-    // Dynamic adjustments based on game phase
     if (totalPieces < 20) {
-        // Early game: prioritize mobility
         const playerMobility = game.possibleMoves(player).length;
         const opponentMobility = game.possibleMoves(3 - player as Player).length;
         score += (playerMobility - opponentMobility) * 5;
     } else if (totalPieces > 50) {
-        // Endgame: prioritize piece count
         score += (game.score[player === Player.black ? "black" : "white"] -
             game.score[player === Player.black ? "white" : "black"]) * 10;
     }
@@ -58,11 +54,10 @@ const orderMoves = (moves: Move[]): Move[] => {
     return moves.sort((a, b) => {
         const aScore = WEIGHTS[a.y - 1][a.x - 1];
         const bScore = WEIGHTS[b.y - 1][b.x - 1];
-        return bScore - aScore; // Higher weight first
+        return bScore - aScore;
     });
 };
 
-/** Random move for level 0 */
 export const random = (game: Reversi): BestMove => {
     const possibleMoves = game.possibleMoves();
     if (!possibleMoves.length) return { x: -1, y: -1, score: 0 };
@@ -70,7 +65,6 @@ export const random = (game: Reversi): BestMove => {
     return { x: possibleMoves[idx].x - 1, y: possibleMoves[idx].y - 1, score: 0 };
 };
 
-/** MinMax with alpha-beta pruning */
 const minMax = (
     game: Reversi,
     depth: number,
@@ -81,7 +75,7 @@ const minMax = (
     timeLimit: number
 ): BestMove => {
     const currentPlayer = game.turn;
-    const possibleMoves = orderMoves(game.possibleMoves());
+    const possibleMoves = orderMoves(game.possibleMoves(currentPlayer));
 
     if (Date.now() - startTime > timeLimit || depth === 0 || !possibleMoves.length) {
         return { x: -1, y: -1, score: evaluateBoard(game, currentPlayer) };
@@ -93,16 +87,24 @@ const minMax = (
         if (entry && entry.depth >= depth) return { ...entry.move, score: entry.score };
     }
 
-    let bestMove: BestMove = { x: -1, y: -1, score: maximizingPlayer ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY };
-    const gameCopy = new Reversi().copy(game); // Reuse this copy
-
-
+    let bestMove: BestMove = {
+        x: -1,
+        y: -1,
+        score: maximizingPlayer ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY
+    };
     let [_alpha, _beta] = [alpha, beta];
-    for (const move of possibleMoves) {
-        gameCopy.copy(game); // Reset to original state
-        gameCopy.placeStone(move.x - 1, move.y - 1);
 
-        const result = minMax(gameCopy, depth - 1, _alpha, _beta, !maximizingPlayer, startTime, timeLimit);
+    for (const move of possibleMoves) {
+        const changes = game.placeStone(move.x - 1, move.y - 1, currentPlayer, false);
+        if (changes.length === 0) continue;
+
+        const originalTurn = game.turn;
+        game.turn = 3 - game.turn as Player;
+
+        const result = minMax(game, depth - 1, _alpha, _beta, !maximizingPlayer, startTime, timeLimit);
+
+        game.undoMove(changes);
+        game.turn = originalTurn;
 
         if (maximizingPlayer) {
             if (result.score > bestMove.score) {
@@ -116,7 +118,7 @@ const minMax = (
             _beta = Math.min(_beta, result.score);
         }
 
-        if (_beta <= _alpha) break; // Prune
+        if (_beta <= _alpha) break;
     }
 
     if (transpositionTable.size < MAX_TABLE_SIZE) {
@@ -126,11 +128,10 @@ const minMax = (
     return bestMove;
 };
 
-// Iterative deepening with dynamic depth
 const iterativeDeepening = (game: Reversi, level: number, timeLimit: number): BestMove => {
     const startTime = Date.now();
     const totalPieces = game.score.black + game.score.white;
-    const maxDepth = Math.min(level + 1, Math.max(2, Math.floor(totalPieces / 10))); // Dynamic depth
+    const maxDepth = Math.min(level + 1, Math.max(2, Math.floor(totalPieces / 10)));
     let bestMove: BestMove = { x: -1, y: -1, score: Number.NEGATIVE_INFINITY };
 
     for (let depth = 1; depth <= maxDepth; depth++) {
@@ -142,19 +143,15 @@ const iterativeDeepening = (game: Reversi, level: number, timeLimit: number): Be
     return bestMove;
 };
 
-// Main solver with adjustable difficulty
 export const solver = (game: Reversi, level = 3): BestMove => {
     if (level === 0) return random(game);
 
     const possibleMoves = game.possibleMoves();
     if (!possibleMoves.length) return { x: -1, y: -1, score: 0 };
 
-    // Randomness decreases with level
     if (Math.random() < (5 - level) * 0.1) return random(game);
 
-    // Adjust time limit based on level (100ms to 500ms)
     const timeLimit = 100 + level * 100;
-
     return iterativeDeepening(game, level, timeLimit);
 };
 

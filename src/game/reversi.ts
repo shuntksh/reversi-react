@@ -19,25 +19,6 @@ export enum Square {
     white = 2,
 }
 
-
-/**
- * y/x --------------------------->
- *  | -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
- *  | -1  0  0  0  0  0  0  0  0 -1
- *  | -1  0  0  0  0  0  0  0  0 -1
- *  | -1  0  0  0  0  0  0  0  0 -1
- *  | -1  0  0  0  2  1  0  0  0 -1
- *  | -1  0  0  0  1  2  0  0  0 -1
- *  | -1  0  0  0  0  0  0  0  0 -1
- *  | -1  0  0  0  0  0  0  0  0 -1
- *  | -1  0  0  0  0  0  0  0  0 -1
- *  | -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
- *
- *  -1: guard data (a.k.a. sentinel)
- *   0: empty
- *   1: black
- *   2: white
- */
 export class Reversi {
     public static initBoard = (): Square[][] => {
         const board = [];
@@ -70,11 +51,7 @@ export class Reversi {
         this.init(player, aiLevel);
     }
 
-    /**
-     * An accessor method that returns game data without sentinel parts. (10x0 -> 8x8)
-     */
     get value(): Square[][] {
-        // Make sure to return a new Array to avoid unintentional mutation.
         const ret = [];
         for (let y = 1; y < 9; y++) {
             const row = [];
@@ -100,9 +77,6 @@ export class Reversi {
         return { black, white };
     }
 
-    /*
-     * Deep copying game state
-     */
     public copy(game: Reversi): Reversi {
         this.board = game.board.map(y => [...y]);
         this.player = game.player;
@@ -113,9 +87,6 @@ export class Reversi {
         return this;
     }
 
-    /**
-     * Reset game
-     */
     public init(player = Player.black, aiLevel = 3): void {
         this.board = Reversi.initBoard();
         this.turn = Player.black;
@@ -124,32 +95,37 @@ export class Reversi {
         this.thinking = false;
     }
 
-    /**
-     * Function that places a stone into a board and turn that pieces. Return false
-     * if the target location is invalid (cannot place stone).
-     */
-    public placeStone(x: number, y: number, player: Player = this.turn, cb?: () => void): boolean {
-        // Convert cordinate back to the original data structure.
+    public placeStone(x: number, y: number, player: Player = this.turn, tickTurn = true): { x: number, y: number, prev: Square }[] {
         const _x = x + 1;
         const _y = y + 1;
         if (!this.canPlaceStone(_x, _y, player)) {
-            return false;
+            return [];
         }
+        const changes: { x: number, y: number, prev: Square }[] = [];
         for (let yd = -1; yd <= 1; yd++) {
             for (let xd = -1; xd <= 1; xd++) {
-                if (yd === 0 && xd === 0) {
-                    continue;
-                }
+                if (yd === 0 && xd === 0) continue;
                 const count = this.countTurnableStones(_x, _y, xd, yd, player);
                 for (let cur = 1; cur <= count; cur++) {
-                    this.board[_y + cur * yd][_x + cur * xd] = player as number;
+                    const cx = _x + cur * xd;
+                    const cy = _y + cur * yd;
+                    changes.push({ x: cx, y: cy, prev: this.board[cy][cx] });
+                    this.board[cy][cx] = player as number;
                 }
             }
         }
+        changes.push({ x: _x, y: _y, prev: this.board[_y][_x] });
         this.board[_y][_x] = player as number;
+        if (tickTurn) {
+            this.tickTurn();
+        }
+        return changes;
+    }
 
-        this.tickTurn(cb);
-        return true;
+    public undoMove(changes: { x: number, y: number, prev: Square }[]): void {
+        for (const change of changes) {
+            this.board[change.y][change.x] = change.prev;
+        }
     }
 
     public possibleMoves(player: Player = this.turn): Move[] {
@@ -164,10 +140,6 @@ export class Reversi {
         return ret;
     }
 
-    /**
-     * Count tunrnable stones based on position of placement (x, y) and vector (xd, yd)
-     * and returns a number of stone that can be tuned (for given vector);
-     */
     public countTurnableStones(
         x: number,
         y: number,
@@ -178,34 +150,22 @@ export class Reversi {
         const getValueAt = (c: number) => this.board[y + c * yd][x + c * xd] as number;
         const opponent = 3 - player;
         let cursor = 1;
-        // Move cursor till it hits opponent. Otherwise it hits sentinel.
         while (getValueAt(cursor) === opponent) {
             cursor++;
         }
         return getValueAt(cursor) === player ? cursor - 1 : 0;
     }
 
-    /**
-     * Check if the current player / computer can place stone to the place.
-     * if cordinate is ommited, then it validate if there is any place in the
-     * board that current player can place a stone.
-     */
     public canPlaceStone(x?: number, y?: number, player: Player = this.turn): boolean {
         if (typeof x === "undefined" && typeof y === "undefined") {
             return this.canPlaceStoneAnywhere(player);
         }
-
-        // Cordinate is outside of board area
         if (!(x && y) || x < 1 || x > 8 || y < 1 || y > 9) {
             return false;
         }
-
-        // Target already has a stone
         if (this.board[y][x] !== Square.blank) {
             return false;
         }
-
-        // Check against all 8 directions
         for (let yd = -1; yd <= 1; yd++) {
             for (let xd = -1; xd <= 1; xd++) {
                 if (this.countTurnableStones(x, y, xd, yd, player)) {
@@ -215,20 +175,6 @@ export class Reversi {
         }
         return false;
     }
-
-    // public evalPlacement(x: number, y: number, player: Player): number {
-    //     let score = 0;
-    //     const _x = x + 1;
-    //     const _y = y + 1;
-    //     if (!this.canPlaceStone(_x, _y, player)) { return 0; }
-    //     for (let yd = -1; yd <= 1; yd++) {
-    //         for (let xd = -1; xd <= 1; xd++) {
-    //             if (yd === 0 && xd === 0) { continue; }
-    //             score += this.countTurnableStones(_x, _y, xd, yd, player);
-    //         }
-    //     }
-    //     return score;
-    // }
 
     private canPlaceStoneAnywhere(player: Player = this.turn): boolean {
         return !!this.possibleMoves(player).length;
@@ -246,20 +192,12 @@ export class Reversi {
             return;
         }
         if (this.turn !== this.player) {
-            // Set thinking state immediately
             this.thinking = true;
-
-            // Ensure AI takes at least 50ms to respond
             const startTime = Date.now();
-
             setTimeout(() => {
                 computeNextMove(this, () => {
-                    // Calculate elapsed time
                     const elapsedTime = Date.now() - startTime;
-
-                    // If AI responded too quickly, wait until minimum time has passed
                     const remainingTime = Math.max(0, 50 - elapsedTime);
-
                     setTimeout(() => {
                         this.thinking = false;
                         if (typeof cb === "function") {
