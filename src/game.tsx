@@ -1,9 +1,9 @@
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 
-import { Board, Player, ThinkingOverlay } from "./components";
+import { Board, GameOverlay, Player } from "./components";
 import type { Square } from "./game/reversi";
-import Reversi from "./game/reversi";
+import Reversi, { GameStatus } from "./game/reversi";
 
 const game = new Reversi();
 
@@ -14,6 +14,7 @@ export interface ContainerState {
     score: { black: number; white: number };
     aiLevel: number;
     thinking: boolean;
+    gameStatus: GameStatus;
 }
 
 export const Game: React.FC = () => {
@@ -22,8 +23,9 @@ export const Game: React.FC = () => {
         turn: game.turn,
         turnCount: game.turnCount,
         value: game.value,
-        aiLevel: 1,
+        aiLevel: 3,
         thinking: false,
+        gameStatus: GameStatus.inProgress,
     });
 
     const updateBoard = useCallback(() => {
@@ -34,26 +36,27 @@ export const Game: React.FC = () => {
             value: game.value,
             aiLevel: game.aiLevel,
             thinking: game.thinking,
+            gameStatus: game.gameStatus,
         });
     }, []);
 
     useEffect(() => {
         const thinkingInterval = setInterval(() => {
-            if (gameState.thinking !== game.thinking) {
+            if (gameState.thinking !== game.thinking || gameState.gameStatus !== game.gameStatus) {
                 updateBoard();
             }
         }, 16);
         return () => clearInterval(thinkingInterval);
-    }, [gameState.thinking, updateBoard]);
+    }, [gameState.thinking, gameState.gameStatus, updateBoard]);
 
     const handleClick = useCallback(
         (x: number, y: number) => {
-            if (!gameState.thinking) {
-                game.placeStone(x, y, undefined, updateBoard);
+            if (!gameState.thinking && gameState.gameStatus === GameStatus.inProgress) {
+                game.placeStone(x, y, undefined, true);
                 updateBoard();
             }
         },
-        [gameState.thinking, updateBoard]
+        [gameState.thinking, gameState.gameStatus, updateBoard]
     );
 
     const handleAILevelChange = useCallback(
@@ -116,8 +119,10 @@ export const Game: React.FC = () => {
 
                 {/* Board Wrapper with Fixed-Width Centering */}
                 <div className="flex justify-center mb-6">
-                    <div className="w-[600px] h-[600px]">
+                    <div className="board-container">
+                        <div className="board-scaler">
                         <Board values={gameState.value} onClickSquare={handleClick} />
+                        </div>
                     </div>
                 </div>
 
@@ -164,8 +169,13 @@ export const Game: React.FC = () => {
                 </div>
             </div>
 
-            {/* Thinking Overlay (if applicable) */}
-            {gameState.thinking && <ThinkingOverlay />}
+            {/* Game Overlay (for thinking or game over) */}
+            <GameOverlay 
+                thinking={gameState.thinking} 
+                gameStatus={gameState.gameStatus} 
+                playerColor={game.player}
+                onNewGame={resetGame}
+            />
         </div>
     );
 };

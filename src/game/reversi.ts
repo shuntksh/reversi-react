@@ -38,6 +38,17 @@ export enum Square {
 export type UpdateHandler = () => void;
 
 /**
+ * Game status enum
+ */
+export enum GameStatus {
+    inProgress = 'inProgress',
+    blackWins = 'blackWins',
+    whiteWins = 'whiteWins',
+    draw = 'draw',
+    finished = 'finished'
+}
+
+/**
  * Reversi game engine
  * Handles the game state, rules, and mechanics
  */
@@ -90,6 +101,9 @@ export class Reversi {
     /** AI difficulty level (0-4) */
     public aiLevel = 3;
 
+    /** Current game status */
+    public gameStatus: GameStatus = GameStatus.inProgress;
+
     public cb: UpdateHandler | null = null;
 
     /**
@@ -119,11 +133,19 @@ export class Reversi {
     }
 
     /**
-     * Determines if the game is finished by checking turn count
+     * Gets the winner of the game
+     * @returns The winner player or undefined if no winner yet
+     */
+    get winner(): GameStatus {
+        return this.gameStatus;
+    }
+
+    /**
+     * Determines if the game is finished by checking turn count and possible moves
      * @returns true if game is finished, false otherwise
      */
     get finished(): boolean {
-        return this.turnCount >= MAX_TURN_COUNT;
+        return this.gameStatus !== GameStatus.inProgress;
     }
 
     /**
@@ -157,6 +179,7 @@ export class Reversi {
         this.turnCount = game.turnCount;
         this.aiLevel = game.aiLevel;
         this.thinking = game.thinking;
+        this.gameStatus = game.gameStatus;
         return this;
     }
 
@@ -172,6 +195,7 @@ export class Reversi {
         this.turnCount = 1;
         this.aiLevel = aiLevel;
         this.thinking = false;
+        this.gameStatus = GameStatus.inProgress;
     }
 
     /**
@@ -287,8 +311,6 @@ export class Reversi {
         return getValueAt(cursor) === player ? cursor - 1 : 0;
     }
 
-
-
     /**
      * Checks if a move is valid
      * @param x - x-coordinate (1-based)
@@ -340,18 +362,25 @@ export class Reversi {
      * @param cb - Callback function to execute after turn completes
      */
     private tickTurn(cb?: () => void): void {
-        // Check if game is over
+        // Check if game is over due to turn count
         if (this.turnCount >= MAX_TURN_COUNT) {
             this.finishGame();
             return;
         }
 
         // Switch to the other player
-        this.turn = 3 - this.turn;
+        this.turn = 3 - this.turn as Player;
         this.turnCount += 1;
 
-        // If current player has no valid moves, skip their turn
+        // If current player has no valid moves
         if (!this.canPlaceStoneAnywhere(this.turn)) {
+            // Check if the other player also has no valid moves
+            if (!this.canPlaceStoneAnywhere(3 - this.turn as Player)) {
+                // Game is over if neither player can move
+                this.finishGame();
+                return;
+            }
+            // Skip turn if only current player has no moves
             this.tickTurn(cb);
             return;
         }
@@ -374,7 +403,7 @@ export class Reversi {
                         }
                     }, remainingTime);
                 }, this.aiLevel);
-            }, 0);
+            }, 100);
         }
     }
 
@@ -382,7 +411,15 @@ export class Reversi {
      * Handles game end
      */
     private finishGame(): void {
-        console.log("DONE");
+        const { black, white } = this.score;
+
+        if (black > white) {
+            this.gameStatus = GameStatus.blackWins;
+        } else if (white > black) {
+            this.gameStatus = GameStatus.whiteWins;
+        } else {
+            this.gameStatus = GameStatus.draw;
+        }
     }
 }
 

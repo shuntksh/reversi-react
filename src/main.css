@@ -1,1 +1,38 @@
 @import "tailwindcss";
+/* Define the board container as a container */
+.board-container {
+  container-type: inline-size; /* Enables container queries based on width */
+  container-name: board; /* Named for specificity */
+  width: 100%;
+  max-width: 596px; /* Max size matches original board */
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
+  --board-size: 596px; /* Base size of the board */
+  --container-size: 596px; /* Default container size for scaling */
+  --scaler: 1; /* Dynamic scale factor */
+  display: flex; /* Use Flexbox for centering */
+  justify-content: center;
+  align-items: center;
+}
+
+/* Center and scale the board content */
+.board-scaler {
+  width: var(--board-size);
+  height: var(--board-size);
+  transform: scale(var(--scaler));
+  transform-origin: center;
+}
+
+/* Container query adjustments */
+@media  (width < 700px) {
+  .board-container {
+    --scaler: calc(var(--container-size) / var(--board-size));
+  }
+}
+
+
+/* Smooth scaling transition */
+.board-scaler {
+  transition: transform 0.2s ease-in-out;
+}
