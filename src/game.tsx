@@ -106,7 +106,7 @@ export const Game: React.FC = () => {
     }, [gameState.aiLevel, updateBoard]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-2 md:p-4">
             {/* Game Container with Dynamic Sizing */}
             <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-[620px] w-full sm:max-w-[650px] md:max-w-[700px]">
                 {/* Header Section: Turn, Score, and Turn Count */}
@@ -145,7 +145,7 @@ export const Game: React.FC = () => {
 
                 {/* Board Wrapper with Fixed-Width Centering */}
                 <div className="flex justify-center mb-6">
-                    <div className="board-container">
+                    <div className="board-container md:max-w-[596px]">
                         <div className="board-scaler">
                         <Board values={gameState.value} onClickSquare={handleClick} />
                         </div>

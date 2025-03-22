@@ -4,7 +4,6 @@
   container-type: inline-size; /* Enables container queries based on width */
   container-name: board; /* Named for specificity */
   width: 100%;
-  max-width: 596px; /* Max size matches original board */
   aspect-ratio: 1 / 1;
   overflow: hidden;
   position: relative;
