@@ -1,6 +1,7 @@
 import type React from "react";
 import { useEffect } from "react";
 
+import { FaGithub } from "react-icons/fa";
 import { Board, GameOverlay } from "./components";
 import { useReversiGame } from "./reversi/use-reversi-game";
 
@@ -123,6 +124,19 @@ export const Game: React.FC = () => {
 					>
 						Reset Game
 					</button>
+				</div>
+
+				{/* GitHub Footer */}
+				<div className="mt-6 text-center">
+					<a 
+						href="https://github.com/shuntksh/reversi-react" 
+						target="_blank" 
+						rel="noopener noreferrer"
+						className="inline-flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-200"
+					>
+						<FaGithub className="mr-1 h-4 w-4" /> 
+						<span className="text-sm">View on GitHub</span>
+					</a>
 				</div>
 			</div>
 
