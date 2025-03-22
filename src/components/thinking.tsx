@@ -1,6 +1,7 @@
-import type { GameStatus } from "@/reversi/game";
-import { Player } from "@/reversi/game";
 import type React from "react";
+
+import type { GameStatus } from "../reversi/game";
+import { Player } from "../reversi/game";
 
 interface GameOverlayProps {
 	thinking?: boolean;

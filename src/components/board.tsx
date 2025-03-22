@@ -1,7 +1,7 @@
 import type React from "react";
 
-import { type Player, type SoundEffect, Square } from "@/components";
-import type { Square as SquareEnum } from "@/reversi/game";
+import { type Player, type SoundEffect, Square } from ".";
+import type { Square as SquareEnum } from "../reversi/game";
 
 /**
  * Board are coordinated in x-y axis addressed from 0 to 7 and caller

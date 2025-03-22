@@ -1,8 +1,8 @@
 import type React from "react";
 import { useEffect } from "react";
 
-import { Board, GameOverlay } from "@/components";
-import { useReversiGame } from "@/reversi/use-reversi-game";
+import { Board, GameOverlay } from "./components";
+import { useReversiGame } from "./reversi/use-reversi-game";
 
 export const Game: React.FC = () => {
 	const { gameState, handleClick, handleAILevelChange, resetGame, player } =

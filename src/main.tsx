@@ -1,8 +1,9 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 
-import { Game } from "./game";
 import "./main.css";
+
+import { Game } from "./game";
 
 const rootElement = document.getElementById("main");
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { type Player, Square as SquareEnum } from "@/reversi/game";
+import { type Player, Square as SquareEnum } from "../reversi/game";
 import "./stone.css";
 
 export enum Dot {
