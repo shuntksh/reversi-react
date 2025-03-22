@@ -1,207 +1,138 @@
 import type React from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { Board, GameOverlay, Player } from "./components";
-import type { Square } from "./game/reversi";
-import Reversi, { GameStatus } from "./game/reversi";
-
-const game = new Reversi();
-
-export interface ContainerState {
-    value: Square[][];
-    turn: number;
-    turnCount: number;
-    score: { black: number; white: number };
-    aiLevel: number;
-    thinking: boolean;
-    gameStatus: GameStatus;
-}
+import { Board, GameOverlay } from "@/components";
+import { useReversiGame } from "@/reversi/use-reversi-game";
 
 export const Game: React.FC = () => {
-    const [gameState, setGameState] = useState<ContainerState>({
-        score: { white: 2, black: 2 },
-        turn: game.turn,
-        turnCount: game.turnCount,
-        value: game.value,
-        aiLevel: 3,
-        thinking: false,
-        gameStatus: GameStatus.inProgress,
-    });
+	const { gameState, handleClick, handleAILevelChange, resetGame, player } =
+		useReversiGame();
 
-    const updateBoard = useCallback(() => {
-        setGameState({
-            score: game.score,
-            turn: game.turn,
-            turnCount: game.turnCount,
-            value: game.value,
-            aiLevel: game.aiLevel,
-            thinking: game.thinking,
-            gameStatus: game.gameStatus,
-        });
-    }, []);
+	// Handle board scaling based on window size
+	useEffect(() => {
+		const handleResize = () => {
+			const width = window.innerWidth;
+			const boardContainer = document.querySelector(
+				".board-container",
+			) as HTMLElement;
+			if (boardContainer) {
+				if (width < 700) {
+					const containerWidth = boardContainer.offsetWidth;
+					const scaler = containerWidth / 596;
+					boardContainer.style.setProperty("--scaler", scaler.toString());
+				} else {
+					boardContainer.style.setProperty("--scaler", "1");
+				}
+			}
+		};
 
-    // Handle board scaling based on window size
-    useEffect(() => {
-        const handleResize = () => {
-            const width = window.innerWidth;
-            const boardContainer = document.querySelector('.board-container') as HTMLElement;
-            if (boardContainer) {
-                if (width < 700) {
-                    const containerWidth = boardContainer.offsetWidth;
-                    const scaler = containerWidth / 596;
-                    boardContainer.style.setProperty('--scaler', scaler.toString());
-                } else {
-                    boardContainer.style.setProperty('--scaler', '1');
-                }
-            }
-        };
+		// Set initial scale
+		handleResize();
 
-        // Set initial scale
-        handleResize();
+		// Add resize event listener
+		window.addEventListener("resize", handleResize);
 
-        // Add resize event listener
-        window.addEventListener('resize', handleResize);
+		// Clean up
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
 
-        // Clean up
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+	return (
+		<div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-2 md:p-4">
+			{/* Game Container with Dynamic Sizing */}
+			<div className="bg-white rounded-2xl shadow-2xl p-6 max-w-[620px] w-full sm:max-w-[650px] md:max-w-[700px]">
+				{/* Header Section: Turn, Score, and Turn Count */}
+				<div className="text-center mb-6">
+					<h1 className="text-3xl font-extrabold text-gray-800 mb-2">
+						Reversi
+					</h1>
+					<div className="flex justify-center items-center space-x-4">
+						<span
+							className={`text-xl font-semibold ${
+								gameState.turn === 1 ? "text-gray-900" : "text-gray-400"
+							} transition-colors duration-300`}
+						>
+							BLACK: {gameState.score.black}
+						</span>
+						<span className="text-xl font-semibold text-gray-600">vs</span>
+						<span
+							className={`text-xl font-semibold ${
+								gameState.turn === 2 ? "text-gray-900" : "text-gray-400"
+							} transition-colors duration-300`}
+						>
+							WHITE: {gameState.score.white}
+						</span>
+					</div>
+					<p className="text-sm text-gray-500 mt-1">
+						Turn: {gameState.turnCount} |{" "}
+						<span
+							className={`font-bold ${
+								gameState.turn === 1 ? "text-gray-900" : "text-gray-400"
+							}`}
+						>
+							{gameState.turn === 1 ? "Black's Turn" : "White's Turn"}
+						</span>
+					</p>
+				</div>
 
-    useEffect(() => {
-        const thinkingInterval = setInterval(() => {
-            if (gameState.thinking !== game.thinking || gameState.gameStatus !== game.gameStatus) {
-                updateBoard();
-            }
-        }, 16);
-        return () => clearInterval(thinkingInterval);
-    }, [gameState.thinking, gameState.gameStatus, updateBoard]);
+				{/* Board Wrapper with Fixed-Width Centering */}
+				<div className="flex justify-center mb-6">
+					<div className="board-container md:max-w-[596px]">
+						<div className="board-scaler">
+							<Board values={gameState.value} onClickSquare={handleClick} />
+						</div>
+					</div>
+				</div>
 
-    const handleClick = useCallback(
-        (x: number, y: number) => {
-            if (!gameState.thinking && gameState.gameStatus === GameStatus.inProgress) {
-                game.placeStone(x, y, undefined, true);
-                updateBoard();
-            }
-        },
-        [gameState.thinking, gameState.gameStatus, updateBoard]
-    );
+				{/* Controls Section: AI Level and Reset Button */}
+				<div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+					<div className="flex items-center space-x-2">
+						<label
+							htmlFor="ai-level"
+							className="text-sm font-medium text-gray-700"
+						>
+							AI Level:
+						</label>
+						<select
+							id="ai-level"
+							value={gameState.aiLevel}
+							onChange={handleAILevelChange}
+							disabled={gameState.thinking}
+							className={`p-2 rounded-lg border-2 ${
+								gameState.thinking
+									? "border-gray-300 bg-gray-100 cursor-not-allowed"
+									: "border-indigo-500 hover:border-indigo-600"
+							} focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-200 text-gray-800`}
+						>
+							<option value="0">0 - Very Easy</option>
+							<option value="1">1 - Easy</option>
+							<option value="2">2 - Medium</option>
+							<option value="3">3 - Standard</option>
+							<option value="4">4 - Hard</option>
+							<option value="5">5 - Expert</option>
+						</select>
+					</div>
+					<button
+						onClick={resetGame}
+						disabled={gameState.thinking}
+						type="button"
+						className={`px-4 py-2 rounded-lg font-semibold text-white transition-all duration-200 transform hover:scale-105 ${
+							gameState.thinking
+								? "bg-gray-400 cursor-not-allowed"
+								: "bg-red-500 hover:bg-red-600 shadow-lg hover:shadow-xl"
+						}`}
+					>
+						Reset Game
+					</button>
+				</div>
+			</div>
 
-    const handleAILevelChange = useCallback(
-        (e: React.ChangeEvent<HTMLSelectElement>) => {
-            const newLevel = Number.parseInt(e.target.value, 10);
-            setGameState((prev) => ({ ...prev, aiLevel: newLevel }));
-            game.init(Player.black, newLevel);
-            updateBoard();
-        },
-        [updateBoard]
-    );
-
-    const resetGame = useCallback(() => {
-        game.init(Player.black, gameState.aiLevel);
-        updateBoard();
-    }, [gameState.aiLevel, updateBoard]);
-
-    useEffect(() => {
-        game.init(Player.black, gameState.aiLevel);
-        updateBoard();
-    }, [gameState.aiLevel, updateBoard]);
-
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-2 md:p-4">
-            {/* Game Container with Dynamic Sizing */}
-            <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-[620px] w-full sm:max-w-[650px] md:max-w-[700px]">
-                {/* Header Section: Turn, Score, and Turn Count */}
-                <div className="text-center mb-6">
-                    <h1 className="text-3xl font-extrabold text-gray-800 mb-2">
-                        Reversi
-                    </h1>
-                    <div className="flex justify-center items-center space-x-4">
-                        <span
-                            className={`text-xl font-semibold ${
-                                gameState.turn === 1 ? "text-gray-900" : "text-gray-400"
-                            } transition-colors duration-300`}
-                        >
-                            BLACK: {gameState.score.black}
-                        </span>
-                        <span className="text-xl font-semibold text-gray-600">vs</span>
-                        <span
-                            className={`text-xl font-semibold ${
-                                gameState.turn === 2 ? "text-gray-900" : "text-gray-400"
-                            } transition-colors duration-300`}
-                        >
-                            WHITE: {gameState.score.white}
-                        </span>
-                    </div>
-                    <p className="text-sm text-gray-500 mt-1">
-                        Turn: {gameState.turnCount} |{" "}
-                        <span
-                            className={`font-bold ${
-                                gameState.turn === 1 ? "text-gray-900" : "text-gray-400"
-                            }`}
-                        >
-                            {gameState.turn === 1 ? "Black's Turn" : "White's Turn"}
-                        </span>
-                    </p>
-                </div>
-
-                {/* Board Wrapper with Fixed-Width Centering */}
-                <div className="flex justify-center mb-6">
-                    <div className="board-container md:max-w-[596px]">
-                        <div className="board-scaler">
-                        <Board values={gameState.value} onClickSquare={handleClick} />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Controls Section: AI Level and Reset Button */}
-                <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                    <div className="flex items-center space-x-2">
-                        <label
-                            htmlFor="ai-level"
-                            className="text-sm font-medium text-gray-700"
-                        >
-                            AI Level:
-                        </label>
-                        <select
-                            id="ai-level"
-                            value={gameState.aiLevel}
-                            onChange={handleAILevelChange}
-                            disabled={gameState.thinking}
-                            className={`p-2 rounded-lg border-2 ${
-                                gameState.thinking
-                                    ? "border-gray-300 bg-gray-100 cursor-not-allowed"
-                                    : "border-indigo-500 hover:border-indigo-600"
-                            } focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-200 text-gray-800`}
-                        >
-                            <option value="0">0 - Very Easy</option>
-                            <option value="1">1 - Easy</option>
-                            <option value="2">2 - Medium</option>
-                            <option value="3">3 - Standard</option>
-                            <option value="4">4 - Hard</option>
-                            <option value="5">5 - Expert</option>
-                        </select>
-                    </div>
-                    <button
-                        onClick={resetGame}
-                        disabled={gameState.thinking}
-                        type="button"
-                        className={`px-4 py-2 rounded-lg font-semibold text-white transition-all duration-200 transform hover:scale-105 ${
-                            gameState.thinking
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-red-500 hover:bg-red-600 shadow-lg hover:shadow-xl"
-                        }`}
-                    >
-                        Reset Game
-                    </button>
-                </div>
-            </div>
-
-            {/* Game Overlay (for thinking or game over) */}
-            <GameOverlay 
-                thinking={gameState.thinking} 
-                gameStatus={gameState.gameStatus} 
-                playerColor={game.player}
-                onNewGame={resetGame}
-            />
-        </div>
-    );
+			{/* Game Overlay (for thinking or game over) */}
+			<GameOverlay
+				thinking={gameState.thinking}
+				gameStatus={gameState.gameStatus}
+				playerColor={player}
+				onNewGame={resetGame}
+			/>
+		</div>
+	);
 };

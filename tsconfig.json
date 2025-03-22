@@ -1,30 +1,26 @@
 {
-    "compilerOptions": {
-        "target": "ES2022",
-        "allowJs": true,
-        "esModuleInterop": true,
-        "isolatedModules": true,
-        "moduleDetection": "force",
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "verbatimModuleSyntax": true,
-        "incremental": true,
-        "lib": [
-            "esnext",
-            "dom",
-            "dom.iterable",
-            "webworker"
-        ],
-        "module": "esnext",
-        "moduleResolution": "bundler",
-        "noEmit": true,
-        "strict": true,
-        "noImplicitOverride": true,
-        "forceConsistentCasingInFileNames": true,
-        "jsx": "preserve"
-    },
-    "include": [
-        "src/**/*.tsx",
-        "src/**/*.ts"
-    ]
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"target": "ES2022",
+		"allowJs": true,
+		"esModuleInterop": true,
+		"isolatedModules": true,
+		"moduleDetection": "force",
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"verbatimModuleSyntax": true,
+		"incremental": true,
+		"lib": ["esnext", "dom", "dom.iterable", "webworker"],
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"noEmit": true,
+		"strict": true,
+		"noImplicitOverride": true,
+		"forceConsistentCasingInFileNames": true,
+		"jsx": "preserve"
+	},
+	"include": ["src/**/*.tsx", "src/**/*.ts"]
 }

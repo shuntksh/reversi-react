@@ -1,27 +1,28 @@
 @import "tailwindcss";
+
 /* Define the board container as a container */
 .board-container {
-  container-type: inline-size; /* Enables container queries based on width */
-  container-name: board; /* Named for specificity */
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  position: relative;
-  --scaler: 1; /* Dynamic scale factor */
-  display: flex; /* Use Flexbox for centering */
-  justify-content: center;
-  align-items: center;
+	container-type: inline-size; /* Enables container queries based on width */
+	container-name: board; /* Named for specificity */
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	overflow: hidden;
+	position: relative;
+	--scaler: 1; /* Dynamic scale factor */
+	display: flex; /* Use Flexbox for centering */
+	justify-content: center;
+	align-items: center;
 }
 
 /* Center and scale the board content */
 .board-scaler {
-  width: var(--board-size);
-  height: var(--board-size);
-  transform: scale(var(--scaler));
-  transform-origin: center;
+	width: var(--board-size);
+	height: var(--board-size);
+	transform: scale(var(--scaler));
+	transform-origin: center;
 }
 
 /* Smooth scaling transition */
 .board-scaler {
-  transition: transform 0.2s ease-in-out;
+	transition: transform 0.2s ease-in-out;
 }

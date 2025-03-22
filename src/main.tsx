@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
+
 import { Game } from "./game";
 import "./main.css";
 

@@ -3,12 +3,12 @@ export { Dot, Square, type Props as SquareProps } from "./square";
 export { GameOverlay, ThinkingOverlay } from "./thinking";
 
 export enum Player {
-    black = 1,
-    white = 2,
+	black = 1,
+	white = 2,
 }
 
 export interface SoundEffect {
-    sound: boolean;
-    srcBlack: string;
-    srcWhite: string;
+	sound: boolean;
+	srcBlack: string;
+	srcWhite: string;
 }
