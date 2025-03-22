@@ -40,6 +40,32 @@ export const Game: React.FC = () => {
         });
     }, []);
 
+    // Handle board scaling based on window size
+    useEffect(() => {
+        const handleResize = () => {
+            const width = window.innerWidth;
+            const boardContainer = document.querySelector('.board-container') as HTMLElement;
+            if (boardContainer) {
+                if (width < 700) {
+                    const containerWidth = boardContainer.offsetWidth;
+                    const scaler = containerWidth / 596;
+                    boardContainer.style.setProperty('--scaler', scaler.toString());
+                } else {
+                    boardContainer.style.setProperty('--scaler', '1');
+                }
+            }
+        };
+
+        // Set initial scale
+        handleResize();
+
+        // Add resize event listener
+        window.addEventListener('resize', handleResize);
+
+        // Clean up
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     useEffect(() => {
         const thinkingInterval = setInterval(() => {
             if (gameState.thinking !== game.thinking || gameState.gameStatus !== game.gameStatus) {

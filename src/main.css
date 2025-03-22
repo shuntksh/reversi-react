@@ -8,8 +8,6 @@
   aspect-ratio: 1 / 1;
   overflow: hidden;
   position: relative;
-  --board-size: 596px; /* Base size of the board */
-  --container-size: 596px; /* Default container size for scaling */
   --scaler: 1; /* Dynamic scale factor */
   display: flex; /* Use Flexbox for centering */
   justify-content: center;
@@ -23,14 +21,6 @@
   transform: scale(var(--scaler));
   transform-origin: center;
 }
-
-/* Container query adjustments */
-@media  (width < 700px) {
-  .board-container {
-    --scaler: calc(var(--container-size) / var(--board-size));
-  }
-}
-
 
 /* Smooth scaling transition */
 .board-scaler {
